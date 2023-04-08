@@ -1,4 +1,4 @@
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from . import validator
 from department.models import Department
@@ -76,7 +76,7 @@ class Person(models.Model):
         return self.l_name + "," + self.f_name
 
 
-class Employee(AbstractBaseUser, Person):
+class Employee(AbstractBaseUser, Person,PermissionsMixin):
     id = models.AutoField(primary_key=True)
     start_date = models.DateField(auto_now=True)
     supervisor = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
