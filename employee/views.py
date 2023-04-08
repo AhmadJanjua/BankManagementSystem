@@ -53,6 +53,20 @@ def create_employee(request):
     return render(request, 'create_employee.html', {'departments': departments, 'error': error})
 
 def manage_employees(request):
+    if request.method == "POST":
+        id = request.POST.get('id')
+        if id:
+            Employee.objects.get(pk=id).update(dept=None)
+    
+    department_managed = Department.objects.filter(dept_mgr=request.user)
+    Dnos = department_managed.values('DNO')
+    Dn = Dnos[0]
+    Rez = Dn.get('DNO')
+    employees = Employee.objects.filter(is_staff=True,dept=Rez).exclude(is_superuser=True, manager__isnull=False)
+    return render(request, 'manage_employees.html', {'employees': employees})
+
+def remove_employee(request,id):
+    Employee.objects.filter(id=id).update(on_probation=True) 
     department_managed = Department.objects.filter(dept_mgr=request.user)
     Dnos = department_managed.values('DNO')
     Dn = Dnos[0]

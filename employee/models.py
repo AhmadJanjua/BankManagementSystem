@@ -94,7 +94,7 @@ class Employee(AbstractBaseUser, Person,PermissionsMixin):
     dept = models.ForeignKey(Department, null=False, on_delete=models.PROTECT)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-
+    on_probation = models.BooleanField(default=False)
     objects = EmployeeManager()
 
     USERNAME_FIELD = 'id'
