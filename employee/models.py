@@ -102,6 +102,9 @@ class Employee(AbstractBaseUser, Person,PermissionsMixin):
 
     def __str__(self):
         return str(self.id)
+    @property
+    def is_manager(self):
+        return Manager.objects.filter(id=self.id).exists()
 
 
 class Advisor(Employee):

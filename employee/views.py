@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from department.models import Department
+from .models import Employee
 
 @login_required
 def create_employee(request):
@@ -50,3 +51,7 @@ def create_employee(request):
             return redirect('home')
     departments = Department.objects.all()
     return render(request, 'create_employee.html', {'departments': departments, 'error': error})
+
+def manage_employees(request):
+    employees = Employee.objects.filter(is_staff=True).exclude(is_superuser=True, manager__isnull=False)
+    return render(request, 'manage_employees.html', {'employees': employees})

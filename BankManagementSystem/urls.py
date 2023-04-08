@@ -20,7 +20,7 @@ from home.views import home_view
 from home.views import LoginView, SignUpView
 from django.contrib.auth import views as auth_views
 from transaction.views import teller_transactions
-from employee.views import create_employee
+from employee.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,4 +32,7 @@ urlpatterns = [
     path('login/home', home_view, name='home'),
     path('transactions/', teller_transactions, name='teller_transactions'),
     path('create_employee/', create_employee, name='create_employee'),
+    path('manage-employees/', manage_employees, name='manage_employees'),
+    path('manage-employees/home', home_view, name='home'),
+    path('create_employee/home', home_view, name='home'),
 ]
