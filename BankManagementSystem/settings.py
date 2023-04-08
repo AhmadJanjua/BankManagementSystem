@@ -138,3 +138,5 @@ LOGIN_URL = 'login'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 LOGIN_REDIRECT_URL = 'home'
+
+AUTH_USER_MODEL = 'employee.Employee'
