@@ -27,10 +27,17 @@
             <td>{{ employee.dept }}</td>
             <td>{{ employee.supervisor }}</td>
             <td>{{ employee.on_probation }}</td>
+            {% if employee.on_probation %}
+            <form action="restore_employee/{{ employee.id }}">
+                <td> <button type="submit" class="btn btn-primary"> RESTORE </button>
+                </td>
+            </form>
+            {% else %}
             <form action="remove_employee/{{ employee.id }}">
                 <td> <button type="submit" class="btn btn-danger"> REPRIMAND </button>
                 </td>
             </form>
+            {% endif %}
         </tr>
         {% empty %}
         <tr>

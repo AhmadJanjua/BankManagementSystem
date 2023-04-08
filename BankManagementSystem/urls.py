@@ -35,5 +35,7 @@ urlpatterns = [
     path('manage-employees/', manage_employees, name='manage_employees'),
     path('manage-employees/home', home_view, name='home'),
     path('create_employee/home', home_view, name='home'),
-    path('manage-employees/remove_employee/<int:id>',remove_employee,name='remove_employee')
+    path('manage-employees/restore_employee/<int:id>',restore_employee,name='restore_employee'),
+    path('manage-employees/remove_employee/<int:id>',remove_employee,name='remove_employee'),
+    
 ]

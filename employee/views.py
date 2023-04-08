@@ -72,4 +72,13 @@ def remove_employee(request,id):
     Dn = Dnos[0]
     Rez = Dn.get('DNO')
     employees = Employee.objects.filter(is_staff=True,dept=Rez).exclude(is_superuser=True, manager__isnull=False)
-    return render(request, 'manage_employees.html', {'employees': employees})
+    return redirect('http://127.0.0.1:8000/manage-employees/')
+
+def restore_employee(request,id):
+    Employee.objects.filter(id=id).update(on_probation=False) 
+    department_managed = Department.objects.filter(dept_mgr=request.user)
+    Dnos = department_managed.values('DNO')
+    Dn = Dnos[0]
+    Rez = Dn.get('DNO')
+    employees = Employee.objects.filter(is_staff=True,dept=Rez).exclude(is_superuser=True, manager__isnull=False)
+    return redirect('http://127.0.0.1:8000/manage-employees/')
