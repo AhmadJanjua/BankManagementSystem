@@ -6,6 +6,8 @@ from django.views.generic.edit import FormView
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 
+
+
 def home_view(request):
     return render(request, 'home.html')
 

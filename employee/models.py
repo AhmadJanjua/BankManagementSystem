@@ -52,6 +52,17 @@ class EmployeeManager(BaseUserManager):
         dept = Department.objects.get(DNO=dept)
         return self.create_employee(password=password, ssn=ssn, f_name=f_name, l_name=l_name, birthday=birthday, street=street, city=city,
                                     province=province, postal_code=postal_code, dept=dept, **extra_fields)
+    
+
+    def create_manager(self, password, ssn, f_name, l_name, birthday, street, city, province, postal_code, dept,
+                       supervisor=None, **extra_fields):
+        manager = Manager(ssn=ssn, f_name=f_name, l_name=l_name, birthday=birthday, street=street, city=city,
+                          province=province, postal_code=postal_code, dept=dept, supervisor=supervisor,
+                          **extra_fields)
+        manager.set_password(password)
+        manager.save(using=self._db)
+        return manager
+    
 
 
 

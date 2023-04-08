@@ -24,12 +24,19 @@
             <div>
                 <ul class="navbar-nav">
                     {% if user.is_authenticated %}
-                    <span class="navbar-text"> Logged in as {{user.username}} | </span>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}?next=/">Logout</a>
-                    </li>
+                        <span class="navbar-text"> Logged in as {{user.f_name}} | </span>
+                        {% if user.is_superuser %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'create_employee' %}">Create Employee</a>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}?next=/">Logout</a>
+                        </li>
                     {% else %}
-                    <li class="nav-item"> <a class="nav-link" href="/login"> Login </a></li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login"> Login </a>
+                        </li>
                     {% endif %}
                 </ul>
             </div>

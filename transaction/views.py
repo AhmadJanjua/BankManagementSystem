@@ -1,3 +1,6 @@
 from django.shortcuts import render
+from .models import Transaction
 
-# Create your views here.
+def teller_transactions(request):
+    transactions = Transaction.objects.all()
+    return render(request, 'transactions.html', {'transactions': transactions})

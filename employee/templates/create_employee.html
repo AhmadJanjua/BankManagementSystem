@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Create New Employee Account</h1>
+  {% if error %}
+    <p>{{ error }}</p>
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="employee_type" class="form-label">Employee Type</label>
+      <select class="form-select" id="employee_type" name="employee_type">
+        <option value="manager">Manager</option>
+        <option value="advisor">Advisor</option>
+        <option value="teller">Teller</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="id" class="form-label">Employee ID</label>
+      <input type="text" class="form-control" id="id" name="id">
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" class="form-control" id="password" name="password">
+    </div>
+    <div class="mb-3">
+      <label for="ssn" class="form-label">Social Security Number</label>
+      <input type="text" class="form-control" id="ssn" name="ssn">
+    </div>
+    <div class="mb-3">
+      <label for="f_name" class="form-label">First Name</label>
+      <input type="text" class="form-control" id="f_name" name="f_name">
+    </div>
+    <div class="mb-3">
+      <label for="l_name" class="form-label">Last Name</label>
+      <input type="text" class="form-control" id="l_name" name="l_name">
+    </div>
+    <div class="mb-3">
+      <label for="birthday" class="form-label">Birthday</label>
+      <input type="date" class="form-control" id="birthday" name="birthday">
+    </div>
+    <div class="mb-3">
+      <label for="street" class="form-label">Street Address</label>
+      <input type="text" class="form-control" id="street" name="street">
+    </div>
+    <div class="mb-3">
+      <label for="city" class="form-label">City</label>
+      <input type="text" class="form-control" id="city" name="city">
+    </div>
+    <div class="mb-3">
+      <label for="province" class="form-label">Province</label>
+      <input type="text" class="form-control" id="province" name="province">
+    </div>
+    <div class="mb-3">
+      <label for="postal_code" class="form-label">Postal Code</label>
+      <input type="text" class="form-control" id="postal_code" name="postal_code">
+    </div>
+    <div class="mb-3">
+      <label for="dept" class="form-label">Department</label>
+      <select class="form-select" id="dept" name="dept">
+        {% for department in departments %}
+          <option value="{{ department.DNO }}">{{ department.Name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    {% if employee_type == 'advisor' %}
+      <div class="mb-3">
+        <label for="cpf_num" class="form-label">CPF Number</label>
+        <input type="text" class="form-control" id="cpf_num" name="cpf_num">
+      </div>
+      <div class="mb-3">
+        <label for="office_num" class="form-label">Office Number</label>
+        <input type="text" class="form-control" id="office_num" name="office_num">
+      </div>
+    {% endif %}
+    <button type="submit" class="btn btn-primary">Create Account</button>
+</form>
+{% endblock %}
+    

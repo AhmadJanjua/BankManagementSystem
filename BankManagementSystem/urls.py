@@ -19,6 +19,8 @@ from django.urls import path
 from home.views import home_view
 from home.views import LoginView, SignUpView
 from django.contrib.auth import views as auth_views
+from transaction.views import teller_transactions
+from employee.views import create_employee
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,5 +30,6 @@ urlpatterns = [
     path('home', home_view, name='home'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('login/home', home_view, name='home'),
-    path('signup/home', home_view, name='home'),
+    path('transactions/', teller_transactions, name='teller_transactions'),
+    path('create_employee/', create_employee, name='create_employee'),
 ]
