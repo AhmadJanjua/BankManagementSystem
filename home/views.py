@@ -3,11 +3,12 @@
 from django.shortcuts import render
 from django.contrib.auth.views import LoginView
 from django.views.generic.edit import FormView
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 
 
-
+@login_required(login_url="/login")
 def home_view(request):
     return render(request, 'home.html')
 
