@@ -15,4 +15,5 @@ class Loan(models.Model):
     remaining = models.IntegerField(default=amount)
     advisor = models.ForeignKey(Advisor, on_delete=models.PROTECT)
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
+    approved = models.BooleanField(default=False)
 
