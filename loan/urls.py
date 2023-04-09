@@ -1,9 +1,9 @@
 from django.urls import path
-from home.views import home_view
+from .views import create_loan
 
 # sets the namespace
 app_name = 'loan'
 # directs the urls from root
 urlpatterns = [
-    path('', home_view, name='home'),
+    path('create_loan/', create_loan , name='create_loan'),
 ]
