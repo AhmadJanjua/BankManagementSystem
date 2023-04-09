@@ -30,12 +30,21 @@
         </li>
         <br>
         {% endif %}
+        {% if user.is_advisor %}
         <li class="nav-item">
             <a class="btn btn-info" href="{% url 'loan:create_loan' %}">Create a loan </a>
         </li>
+        {% endif %}
+        <br>
         <li class="nav-item">
             <a class="btn btn-info" href="{% url 'customer:create_customer' %}">Create a customer </a>
         </li>
+        <br>
+        {% if user.is_teller %}
+        <li class="nav-item">
+            <a class="btn btn-info" href="{% url 'transaction:perform' %}">Create Transaction </a>
+        </li>
+        {% endif %}
         <br>
     </ul>
 </div>
