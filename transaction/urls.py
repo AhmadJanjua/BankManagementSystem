@@ -1,9 +1,9 @@
 from django.urls import path
-from . import views
+from .views import *
 
 # sets the namespace
 app_name = 'transaction'
 # directs the urls from root
 urlpatterns = [
-    path('transactions/', views.teller_transactions, name='teller_transactions'),
+    path('perform/', perform_trans, name='perform'),
 ]
