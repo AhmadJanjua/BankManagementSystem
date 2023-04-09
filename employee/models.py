@@ -45,15 +45,6 @@ class EmployeeManager(BaseUserManager):
         manager.save(using=self._db)
         return manager
 
-    def create_superuser(self, password, ssn, f_name, l_name, birthday, street, city, province, postal_code, dept,
-                        **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        dept = Department.objects.get(DNO=dept)
-        return self.create_employee(password=password, ssn=ssn, f_name=f_name, l_name=l_name, birthday=birthday, street=street, city=city,
-                                    province=province, postal_code=postal_code, dept=dept, **extra_fields)
-    
-
     def create_manager(self, password, ssn, f_name, l_name, birthday, street, city, province, postal_code, dept,
                        supervisor=None, **extra_fields):
         manager = Manager(ssn=ssn, f_name=f_name, l_name=l_name, birthday=birthday, street=street, city=city,
@@ -62,11 +53,15 @@ class EmployeeManager(BaseUserManager):
         manager.set_password(password)
         manager.save(using=self._db)
         return manager
-    
 
-
-
-    
+    def create_superuser(self, password, ssn, f_name, l_name, birthday, street, city, province, postal_code, dept,
+                         **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        dept = Department.objects.get(DNO=dept)
+        return self.create_manager(password=password, ssn=ssn, f_name=f_name, l_name=l_name, birthday=birthday,
+                                   street=street, city=city, province=province, postal_code=postal_code,
+                                   dept=dept, **extra_fields)
 
 
 # The base persons class from which all others inherit
@@ -78,7 +73,7 @@ class Person(models.Model):
     street = models.CharField(max_length=100, null=False)
     city = models.CharField(max_length=100, null=False)
     province = models.CharField(max_length=100, null=False)
-    postal_code = models.CharField(max_length=7, null=False)#, validators=[validator.validate_postal_code])
+    postal_code = models.CharField(max_length=7, null=False)  # , validators=[validator.validate_postal_code])
 
     class Meta:
         abstract = True
@@ -87,7 +82,7 @@ class Person(models.Model):
         return self.l_name + "," + self.f_name
 
 
-class Employee(AbstractBaseUser, Person,PermissionsMixin):
+class Employee(AbstractBaseUser, Person, PermissionsMixin):
     id = models.AutoField(primary_key=True)
     start_date = models.DateField(auto_now=True)
     supervisor = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
@@ -98,10 +93,12 @@ class Employee(AbstractBaseUser, Person,PermissionsMixin):
     objects = EmployeeManager()
 
     USERNAME_FIELD = 'id'
-    REQUIRED_FIELDS = ['password','ssn','f_name', 'l_name', 'birthday', 'street', 'city', 'province', 'postal_code', 'dept']
+    REQUIRED_FIELDS = ['password', 'ssn', 'f_name', 'l_name', 'birthday', 'street', 'city', 'province', 'postal_code',
+                       'dept']
 
     def __str__(self):
-        return str(self.id)
+        return self.f_name + ": " + str(self.id)
+
     @property
     def is_manager(self):
         return Manager.objects.filter(id=self.id).exists()
