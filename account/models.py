@@ -7,6 +7,9 @@ class Account(models.Model):
     balance = models.DecimalField(max_digits=20, decimal_places=2)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return str(self.account_num)
+
 
 class Savings(Account):
     interest_rate = models.DecimalField(null=False, max_digits=12, decimal_places=6)

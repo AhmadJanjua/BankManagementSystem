@@ -17,3 +17,6 @@ class Loan(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
     approved = models.BooleanField(default=False)
 
+    def __str__(self):
+        return str(self.loan_num)
+

@@ -13,3 +13,6 @@ class Transaction(models.Model):
     teller = models.ForeignKey(Teller, on_delete=models.PROTECT)
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
     loan = models.ForeignKey(Loan, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return str(self.transaction_num)
