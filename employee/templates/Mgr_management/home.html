@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %} Manager Home {% endblock %}
+
+{%block content%}
+    <h1> Manager Management </h1>
+
+    <br>
+    <form method="GET" action="{% url 'employee:mgr_search' %}">
+        <div class="input-group">
+            <input type="search" class="form-control" name="results" placeholder="Search Departments...">
+            <button type="submit" class="btn btn-dark">Search</button>
+        </div>
+    </form>
+    <br>
+
+    <form action="{% url 'employee:mgr_create' %}">
+       <button type="submit" class="btn btn-info" >Create new Manager</button>
+    </form>
+    <br>
+
+    <table class="table table-dark table-striped">
+
+    <tr>
+      <th>ID</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Department</th>
+      <th>Supervisor</th>
+      <th></th>
+
+    </tr>
+    {% for manager in managers %}
+    <tr>
+      <th> {{ manager.id }}</th>
+      <th> {{ manager.f_name }}</th>
+      <th> {{ manager.l_name }}</th>
+      <th> {{ manager.dept.DNO }}</th>
+      <th> {{ manager.supervisor.id }}</th>
+      <th>
+          <a class="btn btn-primary" href="{% url 'employee:mgr_view' mgr_id=manager.id %}">Details</a>
+          <a class="btn btn-secondary" href="{% url 'employee:mgr_edit' mgr_id=manager.id %}">Edit</a>
+          <a class="btn btn-warning" href="{% url 'employee:mgr_delete' mgr_id=manager.id %}">Delete</a>
+      </th>
+    </tr>
+    {% endfor %}
+    </table>
+{% endblock %}

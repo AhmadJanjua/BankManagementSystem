@@ -41,7 +41,6 @@ def display_dept(request):
 
 
 def search_dept(request):
-    print('HERE')
     searched = request.GET.get('results', '')
     # retrieve all matching posts
     if searched:

@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+from django.db.models import Q
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from department.models import Department
@@ -29,16 +30,6 @@ def create_employee(request, title, header, button, form_class):
     return render(request, '../templates/render_form.html', {'form': form, 'title':title, 'header': header, 'button':button})
 
 
-@login_required
-def create_manager(request):
-    if not Manager.objects.get(pk=request.user.id):
-        return redirect('home:home')
-    title = 'Manager'
-    header = 'Create Manager'
-    button = 'Submit'
-    return create_employee(request, title, header, button, ManagerForm)
-
-
 # defines the signup process
 @login_required
 def create_teller(request):
@@ -61,7 +52,6 @@ def manage_employees(request):
         id = request.POST.get('id')
         if id:
             Employee.objects.get(pk=id).update(dept=None)
-    
     department_managed = Department.objects.filter(dept_mgr=request.user)
     Dnos = department_managed.values('DNO')
     Dn = Dnos[0]
@@ -88,3 +78,80 @@ def restore_employee(request, id):
     Rez = Dn.get('DNO')
     employees = Employee.objects.filter(is_staff=True,dept=Rez).exclude(is_superuser=True, manager__isnull=False)
     return redirect('employee:manage_employees')
+
+
+# Manager Management
+@login_required
+def mgr_create(request):
+    if not Manager.objects.get(pk=request.user.id):
+        return redirect('home:home')
+    title = 'Manager'
+    header = 'Create Manager'
+    button = 'Submit'
+    return create_employee(request, title, header, button, ManagerForm)
+
+
+@login_required
+def mgr_home(request):
+    managers = Manager.objects.all().order_by('id')
+    return render(request, 'Mgr_management/home.html', {'managers': managers})
+
+
+@login_required
+def mgr_search(request):
+    searched = request.GET.get('results', '')
+    # retrieve all matching posts
+    if searched:
+        # Perform your search logic here, for example:
+        managers = Manager.objects.filter(Q(f_name__contains=searched) | Q(l_name__contains=searched) | Q(id__contains=searched) | Q(dept__name__contains=searched))
+    else:
+        managers = Manager.objects.none()
+    return render(request, 'Mgr_management/search.html', {'searched': searched, 'managers': managers})
+
+
+@login_required
+def mgr_info(request, mgr_id):
+    mgr = get_object_or_404(Manager, id=mgr_id)
+    return render(request, 'Mgr_management/employee_info.html', {'manager': mgr})
+
+
+@login_required
+def mgr_edit(request, mgr_id):
+    title = 'Update'
+    header = 'Update Department'
+    button = 'Submit'
+    # Retrieve the model instance to be updated
+    mgr = get_object_or_404(Manager, id=mgr_id)
+    if request.method == 'POST':
+        # Create a form instance with the submitted data
+        form = ManagerForm(request.POST, request.FILES, instance=mgr)
+
+        if form.is_valid():
+            # Save the updated model instance
+            form.save()
+
+            previous_url = request.META.get('HTTP_REFERER')
+            if previous_url:
+                return redirect(previous_url, )
+            else:
+                # reload the posts page
+                return redirect('employee:mgr_home')
+    else:
+        # Create a form instance with the data from the model instance to be updated
+        form = ManagerForm(instance=mgr)
+
+    # Render the update form template with the form and model instance
+    return render(request, '../templates/render_form.html',
+                  {'form': form, 'title': title, 'header': header, 'button': button})
+
+
+@login_required
+def mgr_delete(request, mgr_id):
+    mgr = get_object_or_404(Manager, id=mgr_id)
+    mgr.delete()
+    previous_url = request.META.get('HTTP_REFERER')
+    if previous_url:
+        return redirect(previous_url, )
+    else:
+        # reload the posts page
+        return redirect('employee:mgr_home')
