@@ -8,9 +8,13 @@ from employee.models import Manager
 
 @login_required
 def create_department(request):
-    if not Manager.objects.get(pk=request.user.id):
+    # check if the user is a manager; otherwise redirect to the homepage
+    try:
+        Manager.objects.get(pk=request.user.id)
+    except:
         return redirect('home:home')
 
+    # set up some values to populate the template
     title = 'Department'
     header = 'Create Department'
     button = 'Submit'
@@ -21,70 +25,104 @@ def create_department(request):
         form = DepartmentForm(request.POST)
         # make sure there are no errors
         if form.is_valid():
-            # create a user object without submitting it to the database
-            d = form.save(commit=False)
-            # commit the user to the database
-            d.save()
-
+            # create a department object and commit to database
+            form.save()
+            # render the success page
             return render(request, '../templates/success.html')
     else:
         # if the form wasn't filled before, make a new empty form.
         form = DepartmentForm()
-    # Display the form using signup html and form
+    # Display the form filling page
     return render(request, '../templates/render_form.html', {'form': form, 'title':title, 'header': header, 'button': button})
 
 
+# The home page for departments
+# contains a search bar and information about departments
 @login_required
 def display_dept(request):
-    departments = Department.objects.all().order_by('DNO')
-    return render(request, 'dept_home.html', {'departments': departments})
-
-
-def search_dept(request):
-    searched = request.GET.get('results', '')
-    # retrieve all matching posts
-    if searched:
-        # Perform your search logic here, for example:
-        departments = Department.objects.filter(Q(DNO__contains=searched) | Q(name__contains=searched))
+    # only the admin can access this page.
+    if request.user.is_superuser:
+        # get all the departments and render the page
+        departments = Department.objects.all().order_by('DNO')
+        return render(request, 'dept_home.html', {'departments': departments})
     else:
-        departments = Department.objects.none()
-    return render(request, 'search.html', {'searched': searched, 'departments': departments})
+        return redirect('home:home')
 
+
+# search the departments and get the results
 @login_required
-def delete(request, dept_id):
-    dept = get_object_or_404(Department, DNO=dept_id)
-    dept.delete()
-    previous_url = request.META.get('HTTP_REFERER')
-    if previous_url:
-        return redirect(previous_url, )
+def search_dept(request):
+    # make sure only the admin can do this
+    if request.user.is_superuser:
+        # get the searched query
+        searched = request.GET.get('results', '')
+        # make sure something has been searched
+        if searched:
+            # get all matching items related to the search
+            departments = Department.objects.filter(Q(DNO__contains=searched) | Q(name__contains=searched))
+        else:
+            # otherwise there is no search object and thus return none
+            departments = Department.objects.none()
+        # display the page with the results
+        return render(request, 'search.html', {'searched': searched, 'departments': departments})
     else:
-        # reload the posts page
-        return redirect('department:home')
+        # no permission so send to main homepage
+        return redirect('home:home')
 
+
+# Edit the existing department information
 @login_required
 def edit(request, dept_id):
-    title = 'Update'
-    header = 'Update Department'
-    button = 'Submit'
-    # Retrieve the model instance to be updated
-    dept = get_object_or_404(Department, DNO=dept_id)
-    if request.method == 'POST':
-        # Create a form instance with the submitted data
-        form = DepartmentForm(request.POST, request.FILES, instance=dept)
-
-        if form.is_valid():
-            # Save the updated model instance
-            form.save()
-
-            previous_url = request.META.get('HTTP_REFERER')
-            if previous_url:
-                return redirect(previous_url, )
-            else:
-                # reload the posts page
-                return redirect('department:home')
+    # check if the user is an admin
+    if request.user.is_superuser:
+        # set up values for the rendering page
+        title = 'Update'
+        header = 'Update Department'
+        button = 'Submit'
+        # Retrieve the model instance to be updated
+        dept = get_object_or_404(Department, DNO=dept_id)
+        if request.method == 'POST':
+            # Create a form instance with the submitted data
+            form = DepartmentForm(request.POST, request.FILES, instance=dept)
+            # check the submission for validity
+            if form.is_valid():
+                # Save the updated model instance
+                form.save()
+                # redirect
+                previous_url = request.META.get('HTTP_REFERER')
+                if previous_url:
+                    return redirect(previous_url, )
+                else:
+                    # reload the posts page
+                    return redirect('department:home')
+        else:
+            # Create a form instance with the data from the model instance to be updated
+            form = DepartmentForm(instance=dept)
+        # Render the update form template with the form and model instance
+        return render(request, '../templates/render_form.html',
+                      {'form': form, 'title': title, 'header': header, 'button': button})
     else:
-        # Create a form instance with the data from the model instance to be updated
-        form = DepartmentForm(instance=dept)
+        return redirect('home:home')
 
-    # Render the update form template with the form and model instance
-    return render(request, '../templates/render_form.html', {'form': form, 'title': title, 'header': header, 'button': button})
+
+# delete a department
+@login_required
+def delete(request, dept_id):
+    # check if the user is an admin
+    if request.user.is_superuser:
+        # if there is no object with that id, direct to a no object page
+        dept = get_object_or_404(Department, DNO=dept_id)
+        # otherwise delete
+        dept.delete()
+        # get the previous page url (search or main page)
+        previous_url = request.META.get('HTTP_REFERER')
+        # go to the previous page if found
+        if previous_url:
+            return redirect(previous_url, )
+        # otherwise go to the department home
+        else:
+            # reload the posts page
+            return redirect('department:home')
+    # otherwise redirect to the main homepage
+    else:
+        return redirect('home:home')

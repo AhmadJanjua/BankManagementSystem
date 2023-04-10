@@ -1,7 +1,6 @@
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model
 from department.models import Department
 from .forms import *
 from .models import Employee
@@ -80,7 +79,7 @@ def restore_employee(request, id):
     return redirect('employee:manage_employees')
 
 
-# Manager Management
+########### Manager Management
 @login_required
 def mgr_create(request):
     if not Manager.objects.get(pk=request.user.id):
