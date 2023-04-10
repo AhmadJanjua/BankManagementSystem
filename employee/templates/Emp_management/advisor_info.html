@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
-{% block title %} Manager Info {% endblock %}
+{% block title %} Advisor Info {% endblock %}
 
 {%block content%}
-    <h1> Manager Information </h1>
+    <h1> Advisor Information </h1>
     <br>
 
 
@@ -17,12 +17,12 @@
             <th>On Probation</th>
         </tr>
         <tr>
-            <th> {{ manager.id }} </th>
-            <th> {{ manager.start_date }} </th>
-            <th> {{ manager.dept.DNO }} </th>
-            <th> {{ manager.dept.name}} </th>
+            <th> {{ advisor.id }} </th>
+            <th> {{ advisor.start_date }} </th>
+            <th> {{ advisor.dept.DNO }} </th>
+            <th> {{ advisor.dept.name}} </th>
             <th>
-                {% if not manager.on_probation %}
+                {% if not advisor.on_probation %}
                     <div class="form-check">
                       <input class="form-check-input" type="checkbox" value="" id="flexCheckDisabled" disabled>
                     </div>
@@ -46,10 +46,10 @@
             <th>Birthday</th>
         </tr>
         <tr>
-            <th> {{ manager.ssn }} </th>
-            <th> {{ manager.f_name }} </th>
-            <th> {{ manager.l_name }} </th>
-            <th> {{ manager.birthday }} </th>
+            <th> {{ advisor.ssn }} </th>
+            <th> {{ advisor.f_name }} </th>
+            <th> {{ advisor.l_name }} </th>
+            <th> {{ advisor.birthday }} </th>
         </tr>
     </table>
 
@@ -62,10 +62,10 @@
             <th>Postal Code</th>
         </tr>
         <tr>
-            <th> {{ manager.street }} </th>
-            <th> {{ manager.city }} </th>
-            <th> {{ manager.province }} </th>
-            <th> {{ manager.postal_code }} </th>
+            <th> {{ advisor.street }} </th>
+            <th> {{ advisor.city }} </th>
+            <th> {{ advisor.province }} </th>
+            <th> {{ advisor.postal_code }} </th>
         </tr>
     </table>
     <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-info">Back</a>

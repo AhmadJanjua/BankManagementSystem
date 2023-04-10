@@ -23,6 +23,10 @@
         <li class="nav-item">
         <a class="btn btn-dark" href="{% url 'employee:teller_home' %}">Teller Management</a>
     </li>
+    <br>
+    <li class="nav-item">
+        <a class="btn btn-dark" href="{% url 'employee:advisor_home' %}">Advisor Management</a>
+    </li>
     </ul>
     {% elif user.is_advisor %}
     {% elif user.is_teller %}

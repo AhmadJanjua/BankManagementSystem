@@ -73,7 +73,7 @@ def remove_employee(request, id):
     Dn = Dnos[0]
     Rez = Dn.get('DNO')
     employees = Employee.objects.filter(is_staff=True,dept=Rez).exclude(is_superuser=True, manager__isnull=False)
-    return redirect('employee:manage_employees')
+    return redirect('home:home')
 
 
 def restore_employee(request, id):
@@ -202,7 +202,7 @@ def mgr_delete(request, mgr_id):
 # pass in a form and information to be rendered
 @login_required
 def teller_create(request):
-    # if the user is not admin they cannot make a manager
+    # if the user is not manager they cannot make a teller
     if not request.user.is_manager:
         return redirect('home:home')
     title = 'Teller'
@@ -211,50 +211,43 @@ def teller_create(request):
     return create_employee(request, title, header, button, TellerForm)
 
 
-# Render the homepage for the manager management with search and a list of managers
+# Render the homepage for the teller management with search and a list of tellers
 @login_required
 def teller_home(request):
-    # if the user is not admin they cannot be on the manager page
-    if not request.user.is_manager:
-        return redirect('home:home')
-    # get all managers
-    tellers = Teller.objects.all().order_by('id')
+    # get tellers in the same department as the logged in manager
+    tellers = Teller.objects.filter(dept=request.user.dept).order_by('id')
     # display the home
     return render(request, 'Emp_management/teller_home.html', {'tellers': tellers})
 
 
-# display the results of a search
 @login_required
 def teller_search(request):
-    # if the user is not admin they cannot search a manager
-    if not request.user.is_manager:
-        return redirect('home:home')
     searched = request.GET.get('results', '')
     # check if there was something searched
     if searched:
-        # check data for matches
-        telers = Teller.objects.filter(Q(f_name__contains=searched) | Q(l_name__contains=searched) | Q(id__contains=searched) | Q(dept__name__contains=searched))
+        # check data for matches, filtering by department of logged in manager
+        tellers = Teller.objects.filter(Q(f_name__contains=searched) | Q(l_name__contains=searched) | Q(id__contains=searched) | Q(dept__name__contains=searched), dept=request.user.dept)
     else:
         tellers = Teller.objects.none()
     # display results
     return render(request, 'Emp_management/teller_search.html', {'searched': searched, 'tellers': tellers})
 
 
-# Display the information of a manager
+# Display the information of a teller
 @login_required
 def teller_info(request, tlr_id):
-    # if the user is not admin they cannot see a manager
+    # if the user is not manager they cannot see a teller
     if not request.user.is_manager:
         return redirect('home:home')
-    # check if manager exists
+    # check if teller exists
     tlr = get_object_or_404(Teller, id=tlr_id)
     return render(request, 'Emp_management/teller_info.html', {'teller': tlr})
 
 
-# edit manager fields
+# edit teller fields
 @login_required
 def teller_edit(request, tlr_id):
-    # if the user is not admin they cannot edit a manager
+    # if the user is not manager they cannot edit a teller
     if not request.user.is_manager:
         return redirect('home:home')
     # populate the render fields
@@ -284,15 +277,15 @@ def teller_edit(request, tlr_id):
                   {'form': form, 'title': title, 'header': header, 'button': button})
 
 
-# delete the manager
+# delete the teller
 @login_required
 def teller_delete(request, tlr_id):
-    # if the user is not admin they cannot delete a manager
+    # if the user is not manager they cannot delete a teller
     if not request.user.is_manager:
         return redirect('home:home')
-    # check if the manager exists
+    # check if the teller exists
     tlr = get_object_or_404(Teller, id=tlr_id)
-    # delete the manager
+    # delete the teller
     tlr.delete()
     # redirect to previous page
     previous_url = request.META.get('HTTP_REFERER')
@@ -301,3 +294,119 @@ def teller_delete(request, tlr_id):
     else:
         # reload the posts page
         return redirect('employee:teller_home')
+
+
+########### Advisor Management (For Manager Use)
+
+# pass in a form and information to be rendered
+@login_required
+def advisor_create(request):
+    # if the user is not manager they cannot make a advisor
+    if not request.user.is_manager:
+        return redirect('home:home')
+    title = 'Advisor'
+    header = 'Create Advisor'
+    button = 'Submit'
+    return create_employee(request, title, header, button, AdvisorForm)
+
+
+# Render the homepage for the advisor management with search and a list of advisors
+@login_required
+def advisor_home(request):
+    # get advisors in the same department as the logged in manager
+    advisors = Advisor.objects.filter(dept=request.user.dept).order_by('id')
+    # display the home
+    return render(request, 'Emp_management/advisor_home.html', {'advisors': advisors})
+
+@login_required
+def advisor_search(request):
+    searched = request.GET.get('results', '')
+    # check if there was something searched
+    if searched:
+        # check data for matches, filtering by department of logged in manager
+        advisors = Advisor.objects.filter(Q(f_name__contains=searched) | Q(l_name__contains=searched) | Q(id__contains=searched) | Q(dept__name__contains=searched), dept=request.user.dept)
+    else:
+        advisors = Advisor.objects.none()
+    # display results
+    return render(request, 'Emp_management/advisor_search.html', {'searched': searched, 'advisors': advisors})
+
+
+
+# display the results of a search
+@login_required
+def advisor_search(request):
+    # if the user is not manager they cannot search a advisor
+    if not request.user.is_manager:
+        return redirect('home:home')
+    searched = request.GET.get('results', '')
+    # check if there was something searched
+    if searched:
+        # check data for matches
+        advisors = Advisor.objects.filter(Q(f_name__contains=searched) | Q(l_name__contains=searched) | Q(id__contains=searched) | Q(dept__name__contains=searched))
+    else:
+        advisors = Advisor.objects.none()
+    # display results
+    return render(request, 'Emp_management/advisor_search.html', {'searched': searched, 'advisors': advisors})
+
+
+# Display the information of a advisor
+@login_required
+def advisor_info(request, adv_id):
+    # if the user is not manager they cannot see a advisor
+    if not request.user.is_manager:
+        return redirect('home:home')
+    # check if advisor exists
+    adv = get_object_or_404(Advisor, id=adv_id)
+    return render(request, 'Emp_management/advisor_info.html', {'advisor': adv})
+
+
+# edit advisor fields
+@login_required
+def advisor_edit(request, adv_id):
+    # if the user is not manager they cannot edit a advisor
+    if not request.user.is_manager:
+        return redirect('home:home')
+    # populate the render fields
+    title = 'Update'
+    header = 'Update Department'
+    button = 'Submit'
+    # Retrieve the model instance to be updated
+    adv = get_object_or_404(Advisor, id=adv_id)
+    if request.method == 'POST':
+        # Create a form instance with the submitted data
+        form = ManagerForm(request.POST, request.FILES, instance=adv)
+        if form.is_valid():
+            # Save the updated model instance
+            form.save()
+            # redirect to previous url
+            previous_url = request.META.get('HTTP_REFERER')
+            if previous_url:
+                return redirect(previous_url, )
+            else:
+                # reload the posts page
+                return redirect('employee:advisor_home')
+    else:
+        # Create a form instance with the data from the model instance to be updated
+        form = AdvisorForm(instance=adv)
+    # Render the update form template with the form and model instance
+    return render(request, '../templates/render_form.html',
+                  {'form': form, 'title': title, 'header': header, 'button': button})
+
+
+# delete the advisor
+@login_required
+def advisor_delete(request, adv_id):
+    # if the user is not manager they cannot delete a advisor
+    if not request.user.is_manager:
+        return redirect('home:home')
+    # check if the advisor exists
+    adv = get_object_or_404(Advisor, id=adv_id)
+    # delete the advisor
+    adv.delete()
+    # redirect to previous page
+    previous_url = request.META.get('HTTP_REFERER')
+    if previous_url:
+        return redirect(previous_url, )
+    else:
+        # reload the posts page
+        return redirect('employee:advisor_home')

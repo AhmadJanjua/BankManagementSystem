@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %} Advisor Home {% endblock %}
+
+{%block content%}
+    <h1> Advisor Management </h1>
+
+    <br>
+    <form method="GET" action="{% url 'employee:advisor_search' %}">
+        <div class="input-group">
+            <input type="search" class="form-control" name="results" placeholder="Search Advisors...">
+            <button type="submit" class="btn btn-dark">Search</button>
+        </div>
+    </form>
+    <br>
+
+    <form action="{% url 'employee:advisor_create' %}">
+       <button type="submit" class="btn btn-info" >Create new Advisor</button>
+    </form>
+    <br>
+
+    <table class="table table-dark table-striped">
+
+    <tr>
+      <th>ID</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Department</th>
+      <th>Supervisor</th>
+      <th></th>
+
+    </tr>
+    {% for advisor in advisors %}
+    <tr>
+      <th> {{ advisor.id }}</th>
+      <th> {{ advisor.f_name }}</th>
+      <th> {{ advisor.l_name }}</th>
+      <th> {{ advisor.dept.DNO }}</th>
+      <th> {{ advisor.supervisor.id }}</th>
+      <th>
+          <a class="btn btn-primary" href="{% url 'employee:advisor_view' adv_id=advisor.id %}">Details</a>
+          <a class="btn btn-secondary" href="{% url 'employee:advisor_edit' adv_id=advisor.id %}">Edit</a>
+          <a class="btn btn-warning" href="{% url 'employee:advisor_delete' adv_id=advisor.id %}">Delete</a>
+      </th>
+    </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
