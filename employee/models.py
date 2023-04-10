@@ -4,7 +4,9 @@ from . import validator
 from department.models import Department
 
 
+# a manager class for creating authorized users with custom fields
 class EmployeeManager(BaseUserManager):
+    # create an employee and ensure the fields are populated and repeat for others
     def create_employee(self, password, ssn, f_name, l_name, birthday, street, city, province, postal_code, dept,
                         supervisor=None, **extra_fields):
         if not ssn:
@@ -110,6 +112,7 @@ class Employee(AbstractBaseUser, Person, PermissionsMixin):
         return Teller.objects.filter(id=self.id).exists()
 
 
+# make an advisor subclass
 class Advisor(Employee):
     office_num = models.IntegerField(null=False)
     cpf_num = models.IntegerField(null=False, unique=True)
@@ -117,9 +120,11 @@ class Advisor(Employee):
                        'office_num', 'cpf_num']
 
 
+# make a teller subclass
 class Teller(Employee):
     pass
 
 
+# make a manager subclass
 class Manager(Employee):
     pass

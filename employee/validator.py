@@ -13,6 +13,7 @@ def validate_ssn(value):
         raise ValidationError('%(value)s is not a valid ssn', params={'value1': value})
 
 
+# validate postal code
 def validate_postal_code(value):
     value = str(value)
     regex = "^(?!.*[DFIOQU])[A-VXY][0-9][A-Z]●?[0-9][A-Z][0-9]$"
