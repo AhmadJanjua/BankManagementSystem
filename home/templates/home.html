@@ -18,6 +18,12 @@
             <br>
         </ul>
     {% elif user.is_manager %}
+    <br>
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+        <a class="btn btn-dark" href="{% url 'employee:teller_home' %}">Teller Management</a>
+    </li>
+    </ul>
     {% elif user.is_advisor %}
     {% elif user.is_teller %}
     {% endif %}

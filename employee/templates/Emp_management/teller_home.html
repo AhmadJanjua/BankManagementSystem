@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %} Teller Home {% endblock %}
+
+{%block content%}
+    <h1> Teller Management </h1>
+
+    <br>
+    <form method="GET" action="{% url 'employee:mgr_search' %}">
+        <div class="input-group">
+            <input type="search" class="form-control" name="results" placeholder="Search Departments...">
+            <button type="submit" class="btn btn-dark">Search</button>
+        </div>
+    </form>
+    <br>
+
+    <form action="{% url 'employee:teller_create' %}">
+       <button type="submit" class="btn btn-info" >Create new Teller</button>
+    </form>
+    <br>
+
+    <table class="table table-dark table-striped">
+
+    <tr>
+      <th>ID</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Department</th>
+      <th>Supervisor</th>
+      <th></th>
+
+    </tr>
+    {% for teller in tellers %}
+    <tr>
+      <th> {{ teller.id }}</th>
+      <th> {{ teller.f_name }}</th>
+      <th> {{ teller.l_name }}</th>
+      <th> {{ teller.dept.DNO }}</th>
+      <th> {{ teller.supervisor.id }}</th>
+      <th>
+          <a class="btn btn-primary" href="{% url 'employee:teller_view' tlr_id=teller.id %}">Details</a>
+          <a class="btn btn-secondary" href="{% url 'employee:teller_edit' tlr_id=teller.id %}">Edit</a>
+          <a class="btn btn-warning" href="{% url 'employee:teller_delete' tlr_id=teller.id %}">Delete</a>
+      </th>
+    </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
