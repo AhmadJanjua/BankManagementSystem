@@ -3,7 +3,7 @@
 {% block title %} Home Page {% endblock %}
 
 {%block content%}
-<h1> Home Page of Bank </h1>
+<h1> Select Account to Open </h1>
 <div>
     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         {% if user.is_superuser %}
@@ -45,14 +45,6 @@
             <a class="btn btn-info" href="{% url 'transaction:perform' %}">Create Transaction </a>
         </li>
         {% endif %}
-        <br>
-        <li class="nav-item">
-            <a class="btn btn-info" href="{% url 'account:create_savings' %}">Create Savings </a>
-        </li>
-        <br>
-        <li class="nav-item">
-            <a class="btn btn-info" href="{% url 'account:create_chequing' %}">Create Chequing </a>
-        </li>
         <br>
     </ul>
 </div>
