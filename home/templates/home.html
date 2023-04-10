@@ -5,55 +5,22 @@
 {%block content%}
 <h1> Home Page of Bank </h1>
 <div>
-    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        {% if user.is_superuser %}
-        <li class="nav-item">
-            <a class="btn btn-secondary" href="{% url 'employee:create_manager' %}">Create Manager</a>
-        </li>
+    {% if user.is_superuser %}
         <br>
-        <li class="nav-item">
-            <a class="btn btn-dark" href="{% url 'department:create_department' %}">Create Department</a>
-        </li>
-        <br>
-        {% endif %}
-        {% if user.is_manager %}
-        <li class="nav-item">
-            <a class="btn btn-info" href="{% url 'employee:manage_employees' %}">Manage Employees</a>
-        </li>
-        <br>
-        <li class="nav-item">
-            <a class="btn btn-primary" href="{% url 'employee:create_advisor' %}">Create Advisor</a>
-        </li>
-        <br>
-        <li class="nav-item">
-            <a class="btn btn-primary" href="{% url 'employee:create_teller' %}">Create Teller</a>
-        </li>
-        <br>
-        {% endif %}
-        {% if user.is_advisor %}
-        <li class="nav-item">
-            <a class="btn btn-info" href="{% url 'loan:create_loan' %}">Create a loan </a>
-        </li>
-        {% endif %}
-        <br>
-        <li class="nav-item">
-            <a class="btn btn-info" href="{% url 'customer:create_customer' %}">Create a customer </a>
-        </li>
-        <br>
-        {% if user.is_teller %}
-        <li class="nav-item">
-            <a class="btn btn-info" href="{% url 'transaction:perform' %}">Create Transaction </a>
-        </li>
-        {% endif %}
-        <br>
-        <li class="nav-item">
-            <a class="btn btn-info" href="{% url 'account:create_savings' %}">Create Savings </a>
-        </li>
-        <br>
-        <li class="nav-item">
-            <a class="btn btn-info" href="{% url 'account:create_chequing' %}">Create Chequing </a>
-        </li>
-        <br>
-    </ul>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="btn btn-dark" href="{% url 'department:home' %}">Department Management</a>
+            </li>
+            <br>
+            <li class="nav-item">
+                <a class="btn btn-dark" href="{% url 'employee:manage_employees' %}">Manager Management</a>
+            </li>
+            <br>
+        </ul>
+    {% elif user.is_manager %}
+    {% elif user.is_advisor %}
+    {% elif user.is_teller %}
+    {% endif %}
+
 </div>
 {% endblock %}

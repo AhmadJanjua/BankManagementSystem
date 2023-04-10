@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %} Home Page {% endblock %}
+
+{%block content%}
+    <h1> Department Management </h1>
+
+    <br>
+    <form method="GET" action="{% url 'department:search' %}">
+        <div class="input-group">
+            <input type="search" class="form-control" name="results" placeholder="Search Departments...">
+            <button type="submit" class="btn btn-dark">Search</button>
+        </div>
+    </form>
+    <br>
+
+    <form action="{% url 'department:create_department' %}">
+       <button type="submit" class="btn btn-info" >Create new department</button>
+    </form>
+    <br>
+
+    <table class="table table-dark table-striped">
+
+    <tr>
+      <th>DNO</th>
+      <th>Name</th>
+      <th>Manager ID</th>
+      <th>Manager Name</th>
+      <th></th>
+
+    </tr>
+    {% for department in departments %}
+    <tr>
+      <th> {{ department.DNO }}</th>
+      <th> {{ department.name }}</th>
+      <th> {{ department.dept_mgr.id }}</th>
+      <th> {{ department.dept_mgr.f_name }}</th>
+      <th>
+          <a class="btn btn-secondary" href="{% url 'department:edit' dept_id=department.DNO %}">Edit</a>
+          <a class="btn btn-warning" href="{% url 'department:delete' dept_id=department.DNO %}">Delete</a>
+      </th>
+    </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
