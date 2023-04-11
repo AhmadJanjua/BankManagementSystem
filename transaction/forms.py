@@ -10,12 +10,10 @@ class TransactionForm(forms.ModelForm):
         model = Transaction
         fields = ('amount', 'account', 'loan')
 
-    def __init__(self,*args,**kwargs):
-        super().__init__(*args,**kwargs)
-        customer = kwargs.pop('customer')
-        #customer_accounts = 
-        #customer_loans =
+    def __init__(self, customer1, *args,**kwargs):
+        super().__init__(*args, **kwargs)
+        customer = customer1
         if customer:
             self.fields['account'].queryset = Account.objects.filter(customer=customer)
-            self.fields['loan'].queryset =  Loan.objects.filter(customer=customer)
+            self.fields['loan'].queryset = Loan.objects.filter(customer=customer)
     
