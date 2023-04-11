@@ -4,6 +4,7 @@ from employee.models import Advisor
 from customer.models import Customer
 from .models import Loan
 from .forms import LoanForm
+from transaction.models import Transaction
 # Create your views here.
 @login_required
 def create_loan(request,cid):
@@ -72,4 +73,11 @@ def delete_loan(request,loanNo):
     else:
         return redirect('employee:customer_home')
 
+def view_loan_transactions(request,loanNo):
+    try:
+        Advisor.objects.get(pk=request.user.id)
+    except:
+        return redirect('home:home')
+    transactions = Transaction.objects.filter(loan=loanNo)
+    return render(request,'loan_transactions.html',{'transactions':transactions})
 

@@ -93,8 +93,11 @@
         <th> {{ loan.customer }}</th>
         <th> {{ loan.approved }}</th>
         <th>
-            <a class="btn btn-primary" href="{% url 'loan:view_modify_loan' loanNo=loan.loan_num %}"> View </a>
+
+            <a class="btn btn-warning" href="{% url 'loan:view_modify_loan' loanNo=loan.loan_num %}"> Edit </a>
             <a class="btn btn-danger" href="{% url 'loan:delete_loan' loanNo=loan.loan_num %}"> Delete </a>
+            <a class="btn btn-primary" href="{% url 'loan:view_loan_transactions' loanNo=loan.loan_num %}"> View
+                Transactions </a>
         </th>
     </tr>
     {% endfor %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Transactions on Loan </h1>
+<table>
+    <thead>
+        <tr>
+            <th>Transaction number</th>
+            <th>Account number</th>
+            <th>Performed by</th>
+            <th>Customer request ssn</th>
+            <th>Loan payment</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in transactions %}
+        <tr>
+            <td>{{ transaction.transaction_number }}</td>
+            <td>{{ transaction.account_number }}</td>
+            <td>{{ transaction.performed_by_ssn }}</td>
+            <td>{{ transaction.customer_request_ssn }}</td>
+            <td>{{ transaction.loan_payment }}</td>
+            <td>{{ transaction.amount }}</td>
+            <td>{{ transaction.date }}</td>
+            <td>{{ transaction.time }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
