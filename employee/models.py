@@ -12,7 +12,7 @@ class EmployeeManager(BaseUserManager):
         if not ssn:
             raise ValueError('The Social Security Number field must be set')
         employee = self.model(ssn=ssn, f_name=f_name, l_name=l_name, birthday=birthday, street=street, city=city,
-                              province=province, postal_code=postal_code, dept=dept, supervisor=supervisor,
+                              province=province, postal_code=postal_code.upper(), dept=dept, supervisor=supervisor,
                               **extra_fields)
         employee.set_password(password)
         employee.save(using=self._db)
@@ -22,7 +22,7 @@ class EmployeeManager(BaseUserManager):
                        office_num, cpf_num, supervisor=None, **extra_fields):
         extra_fields.setdefault('is_staff', False)
         advisor = Advisor(ssn=ssn, f_name=f_name, l_name=l_name, birthday=birthday, street=street, city=city,
-                          province=province, postal_code=postal_code, dept=dept, supervisor=supervisor,
+                          province=province, postal_code=postal_code.upper(), dept=dept, supervisor=supervisor,
                           office_num=office_num, cpf_num=cpf_num, **extra_fields)
         advisor.set_password(password)
         advisor.save(using=self._db)
@@ -32,7 +32,7 @@ class EmployeeManager(BaseUserManager):
                       supervisor=None, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', False)
         teller = Teller(ssn=ssn, f_name=f_name, l_name=l_name, birthday=birthday, street=street, city=city,
-                        province=province, postal_code=postal_code, dept=dept, supervisor=supervisor,
+                        province=province, postal_code=postal_code.upper(), dept=dept, supervisor=supervisor,
                         **extra_fields)
         teller.set_password(password)
         teller.save(using=self._db)
@@ -41,7 +41,7 @@ class EmployeeManager(BaseUserManager):
     def create_manager(self, password, ssn, f_name, l_name, birthday, street, city, province, postal_code, dept,
                        supervisor=None, **extra_fields):
         manager = Manager(ssn=ssn, f_name=f_name, l_name=l_name, birthday=birthday, street=street, city=city,
-                          province=province, postal_code=postal_code, dept=dept, supervisor=supervisor,
+                          province=province, postal_code=postal_code.upper(), dept=dept, supervisor=supervisor,
                           **extra_fields)
         manager.set_password(password)
         manager.save(using=self._db)
@@ -50,7 +50,7 @@ class EmployeeManager(BaseUserManager):
     def create_manager(self, password, ssn, f_name, l_name, birthday, street, city, province, postal_code, dept,
                        supervisor=None, **extra_fields):
         manager = Manager(ssn=ssn, f_name=f_name, l_name=l_name, birthday=birthday, street=street, city=city,
-                          province=province, postal_code=postal_code, dept=dept, supervisor=supervisor,
+                          province=province, postal_code=postal_code.upper(), dept=dept, supervisor=supervisor,
                           **extra_fields)
         manager.set_password(password)
         manager.save(using=self._db)
@@ -62,7 +62,7 @@ class EmployeeManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', True)
         dept = Department.objects.get(DNO=dept)
         return self.create_manager(password=password, ssn=ssn, f_name=f_name, l_name=l_name, birthday=birthday,
-                                   street=street, city=city, province=province, postal_code=postal_code,
+                                   street=street, city=city, province=province, postal_code=postal_code.upper(),
                                    dept=dept, **extra_fields)
 
 
@@ -75,7 +75,7 @@ class Person(models.Model):
     street = models.CharField(max_length=100, null=False)
     city = models.CharField(max_length=100, null=False)
     province = models.CharField(max_length=100, null=False)
-    postal_code = models.CharField(max_length=7, null=False)  # , validators=[validator.validate_postal_code])
+    postal_code = models.CharField(max_length=7, null=False, validators=[validator.validate_postal_code])
 
     class Meta:
         abstract = True

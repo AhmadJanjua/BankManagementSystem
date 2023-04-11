@@ -16,7 +16,7 @@ def validate_ssn(value):
 # validate postal code
 def validate_postal_code(value):
     value = str(value)
-    regex = "^(?!.*[DFIOQU])[A-VXY][0-9][A-Z]●?[0-9][A-Z][0-9]$"
+    regex = "^[a-zA-Z][0-9][a-zA-Z]\s[0-9][a-zA-Z][0-9]$"
     p = re.compile(regex)
 
     # if the string is non or does not match the regex the error is thrown
