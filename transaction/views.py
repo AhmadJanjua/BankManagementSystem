@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from .forms import TransactionForm
 from employee.models import Teller
+from customer.models import Customer
 
-
-def perform_trans(request):
+def perform_trans(request,cid):
     try:
         Teller.objects.get(pk=request.user.id)
     except:
@@ -22,6 +22,7 @@ def perform_trans(request):
             # create a user object without submitting it to the database
             tran = form.save(commit=False)
             tran.teller = request.user
+            tran.customer = Customer.objects.get(pk=cid)
             # commit the user to the database
             tran.save()
 

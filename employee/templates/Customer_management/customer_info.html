@@ -63,7 +63,7 @@
     </tr>
     {% endfor %}
 </table>
-
+<a class="btn btn-primary" href="{% url 'transaction:perform' cid=customer.ssn %}"> Add Transaction </a>
 
 {% elif user.is_advisor %}
 <h3> Loans </h3>
