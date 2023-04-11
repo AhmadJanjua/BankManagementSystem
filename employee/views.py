@@ -5,7 +5,7 @@ from department.models import Department
 from .forms import *
 from .models import Employee
 from django.contrib.auth.decorators import user_passes_test
-
+from customer.models import Customer
 
 # create an employee using a supplied form
 def create_employee(request, title, header, button, form_class):
@@ -410,3 +410,27 @@ def advisor_delete(request, adv_id):
     else:
         # reload the posts page
         return redirect('employee:advisor_home')
+
+##### Customer Management (For Teller Use)
+
+@login_required
+def customer_home(request):
+    #get all the customers
+    customers = Customer.objects.all()
+    #display the home
+    return render(request,'Customer_management/customer_home.html',{'customers': customers})
+
+@login_required
+def customer_search(request):
+    #if the user is not a teller or advisor they cannot search customers
+    #if not request.user.is_teller or not request.user.is_advisor:
+        #return redirect('home:home')
+    searched = request.GET.get('results','')
+    #check if there was something searched
+    if searched:
+        #check data for matches
+        customers = Customer.objects.filter(Q(f_name__contains=searched) | Q(l_name__contains=searched))
+    else:
+        customers = Customer.objects.none()
+    #display results
+    return render(request,'Customer_management/customer_search.html',{'searched':searched,'customers':customers})

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %} Home Page {% endblock %}
+
+{%block content%}
+<h1>You searched for {{ searched }}</h1>
+<h2> {{ customers|length }} results</h2>
+
+<br>
+<form method="GET" action="{% url 'employee:customer_search' %}">
+    <div class="input-group">
+        <input type="search" class="form-control" name="results" placeholder="Search Customers...">
+        <button type="submit" class="btn btn-dark">Search</button>
+    </div>
+</form>
+<br>
+
+<table class="table table-dark table-striped">
+
+    <tr>
+        <th>ssn</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>birthday</th>
+        <th>street</th>
+        <th>city</th>
+        <th>province</th>
+        <th>postal code</th>
+        <th>employment status</th>
+        <th>credit score</th>
+        <th></th>
+    </tr>
+    {% for customer in customers %}
+    <tr>
+        <th> {{ customer.ssn }}</th>
+        <th> {{ customer.f_name }}</th>
+        <th> {{ customer.l_name }}</th>
+        <th> {{ customer.birthday }}</th>
+        <th> {{ customer.street }}</th>
+        <th> {{ customer.city }}</th>
+        <th> {{ customer.province }}</th>
+        <th> {{ customer.postal_code }}</th>
+        <th> {{ customer.employment_status }}</th>
+        <th> {{ customer.credit_score }}</th>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
