@@ -34,6 +34,7 @@ def create_loan(request,cid):
     else:
         form = LoanForm()
     return render(request,'../templates/render_form.html',{'form':form, 'title': title, 'header':header,'button':button})
+
 def view_modify_loan(request,loanNo):
     try:
         Advisor.objects.get(pk=request.user.id)
@@ -57,5 +58,18 @@ def view_modify_loan(request,loanNo):
     else:    
         form = LoanForm(instance=loan)
         return render(request,'../templates/render_form.html',{'form':form, 'title': 'Loan','header': 'modify loan', 'button': 'Submit'})
+
+def delete_loan(request,loanNo):
+    try:
+        Advisor.objects.get(pk=request.user.id)
+    except:
+        return redirect('home:home')
+    loan = Loan.objects.get(pk=loanNo)
+    loan.delete()
+    previous_url = request.META.get('HTTP_REFERER')
+    if previous_url:
+        return redirect(previous_url,)
+    else:
+        return redirect('employee:customer_home')
 
 

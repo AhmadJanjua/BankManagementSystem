@@ -79,7 +79,7 @@
         <th>Advisor</th>
         <th>Customer</th>
         <th> Approved </th>
-        <th> View </th>
+        <th> Actions </th>
     </tr>
     {% for loan in loans %}
     <tr>
@@ -94,6 +94,7 @@
         <th> {{ loan.approved }}</th>
         <th>
             <a class="btn btn-primary" href="{% url 'loan:view_modify_loan' loanNo=loan.loan_num %}"> View </a>
+            <a class="btn btn-danger" href="{% url 'loan:delete_loan' loanNo=loan.loan_num %}"> Delete </a>
         </th>
     </tr>
     {% endfor %}
