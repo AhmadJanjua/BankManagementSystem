@@ -34,7 +34,7 @@
       <th> {{ department.DNO }}</th>
       <th> {{ department.name }}</th>
       <th> {{ department.dept_mgr.id }}</th>
-      <th> {{ department.dept_mgr.f_name }}</th>
+      <th> {{ department.dept_mgr.f_name }} {{department.dept_mgr.l_name}}</th>
       <th>
           <a class="btn btn-secondary" href="{% url 'department:edit' dept_id=department.DNO %}">Edit</a>
           <a class="btn btn-warning" href="{% url 'department:delete' dept_id=department.DNO %}">Delete</a>
