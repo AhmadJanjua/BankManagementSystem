@@ -161,13 +161,8 @@ def mgr_edit(request, mgr_id):
         if form.is_valid():
             # Save the updated model instance
             form.save()
-            # redirect to previous url
-            previous_url = request.META.get('HTTP_REFERER')
-            if previous_url:
-                return redirect(previous_url, )
-            else:
-                # reload the posts page
-                return redirect('employee:mgr_home')
+            # redirect to home
+            return redirect('employee:mgr_home')
     else:
         # Create a form instance with the data from the model instance to be updated
         form = EmployeeForm(instance=mgr,user=request.user)
@@ -186,13 +181,8 @@ def mgr_delete(request, mgr_id):
     mgr = get_object_or_404(Manager, id=mgr_id)
     # delete the manager
     mgr.delete()
-    # redirect to previous page
-    previous_url = request.META.get('HTTP_REFERER')
-    if previous_url:
-        return redirect(previous_url, )
-    else:
-        # reload the posts page
-        return redirect('employee:mgr_home')
+    # redirect to home
+    return redirect('employee:mgr_home')
 
 
 
@@ -264,13 +254,8 @@ def teller_edit(request, tlr_id):
         if form.is_valid():
             # Save the updated model instance
             form.save()
-            # redirect to previous url
-            previous_url = request.META.get('HTTP_REFERER')
-            if previous_url:
-                return redirect(previous_url, )
-            else:
-                # reload the posts page
-                return redirect('employee:teller_home')
+            # redirect to teller home
+            return redirect('employee:teller_home')
     else:
         # Create a form instance with the data from the model instance to be updated
         form = TellerForm(instance=tlr,user=request.user)
@@ -289,13 +274,8 @@ def teller_delete(request, tlr_id):
     tlr = get_object_or_404(Teller, id=tlr_id)
     # delete the teller
     tlr.delete()
-    # redirect to previous page
-    previous_url = request.META.get('HTTP_REFERER')
-    if previous_url:
-        return redirect(previous_url, )
-    else:
-        # reload the posts page
-        return redirect('employee:teller_home')
+    # redirect to home
+    return redirect('employee:teller_home')
 
 
 ########### Advisor Management (For Manager Use)
@@ -380,13 +360,8 @@ def advisor_edit(request, adv_id):
         if form.is_valid():
             # Save the updated model instance
             form.save()
-            # redirect to previous url
-            previous_url = request.META.get('HTTP_REFERER')
-            if previous_url:
-                return redirect(previous_url, )
-            else:
-                # reload the posts page
-                return redirect('employee:advisor_home')
+            # redirect to home
+            return redirect('employee:advisor_home')
     else:
         # Create a form instance with the data from the model instance to be updated
         form = AdvisorForm(instance=adv,user=request.user)
@@ -405,13 +380,8 @@ def advisor_delete(request, adv_id):
     adv = get_object_or_404(Advisor, id=adv_id)
     # delete the advisor
     adv.delete()
-    # redirect to previous page
-    previous_url = request.META.get('HTTP_REFERER')
-    if previous_url:
-        return redirect(previous_url, )
-    else:
-        # reload the posts page
-        return redirect('employee:advisor_home')
+    # redirect to home
+    return redirect('employee:advisor_home')
 
 ##### Customer Management (For Teller Use)
 

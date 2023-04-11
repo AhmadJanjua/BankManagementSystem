@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import Employee, Teller, Advisor, Manager, Department
 
 
@@ -41,7 +41,7 @@ class ManagerForm(EmployeeForm):
 class TellerForm(EmployeeForm):
     class Meta:
         model = Teller
-        fields = ('ssn', 'dept', 'f_name', 'l_name', 'birthday', 'street', 'city', 'province', 'postal_code','supervisor')
+        fields = EmployeeForm.Meta.fields
 
 
 # make an advisor form
