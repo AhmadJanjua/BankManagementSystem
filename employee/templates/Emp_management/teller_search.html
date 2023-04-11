@@ -32,7 +32,7 @@
       <th> {{ teller.f_name }}</th>
       <th> {{ teller.l_name }}</th>
       <th> {{ teller.dept.DNO }}</th>
-      <th> {{ teller.supervisor.id }}</th>
+      <th> {{ teller.supervisor.f_name }} {{teller.supervisor.l_name}}</th>
       <th>
           <a class="btn btn-primary" href="{% url 'employee:teller_view' tlr_id=teller.id %}">Details</a>
           <a class="btn btn-secondary" href="{% url 'employee:teller_edit' tlr_id=teller.id %}">Edit</a>

@@ -32,7 +32,7 @@
       <th> {{ manager.f_name }}</th>
       <th> {{ manager.l_name }}</th>
       <th> {{ manager.dept.DNO }}</th>
-      <th> {{ manager.supervisor.id }}</th>
+      <th> {{ manager.supervisor.f_name }} {{manager.supervisor.l_name}}</th>
       <th>
           <a class="btn btn-secondary" href="{% url 'employee:mgr_edit' mgr_id=manager.id %}">Edit</a>
           <a class="btn btn-warning" href="{% url 'employee:mgr_delete' mgr_id=manager.id %}">Delete</a>

@@ -33,7 +33,7 @@
       <th> {{ advisor.f_name }}</th>
       <th> {{ advisor.l_name }}</th>
       <th> {{ advisor.dept.DNO }}</th>
-      <th> {{ advisor.supervisor.id }}</th>
+      <th> {{ advisor.supervisor.f_name }} {{advisor.supervisor.l_name}}</th>
       <th>
           <a class="btn btn-primary" href="{% url 'employee:advisor_view' adv_id=advisor.id %}">Details</a>
           <a class="btn btn-secondary" href="{% url 'employee:advisor_edit' adv_id=advisor.id %}">Edit</a>
