@@ -21,6 +21,8 @@ class EmployeeForm(UserCreationForm):
         if not self.user.is_superuser:
             dept_pk = self.user.dept.DNO  # extract DNO attribute from Department object
             self.fields['dept'].queryset = Department.objects.filter(pk=dept_pk)
+        else:
+            self.fields['dept'].queryset = Department.objects.all()
 
     class Meta:
         model = Employee

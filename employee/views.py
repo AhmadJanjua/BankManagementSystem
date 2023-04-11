@@ -144,8 +144,11 @@ def mgr_info(request, mgr_id):
 # edit manager fields
 @login_required
 def mgr_edit(request, mgr_id):
+    # check if the user is logged in
+    if not request.user.is_authenticated:
+        return redirect('login')
     # if the user is not admin they cannot edit a manager
-    if not request.user.is_superuser:
+    elif not request.user.is_superuser:
         return redirect('home:home')
     # populate the render fields
     title = 'Update'
@@ -168,7 +171,7 @@ def mgr_edit(request, mgr_id):
                 return redirect('employee:mgr_home')
     else:
         # Create a form instance with the data from the model instance to be updated
-        form = ManagerForm(instance=mgr)
+        form = EmployeeForm(instance=mgr)
     # Render the update form template with the form and model instance
     return render(request, '../templates/render_form.html',
                   {'form': form, 'title': title, 'header': header, 'button': button})
