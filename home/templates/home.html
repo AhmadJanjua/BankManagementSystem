@@ -6,30 +6,37 @@
 <h1> Home Page of Bank </h1>
 <div>
     {% if user.is_superuser %}
+    <br>
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+            <a class="btn btn-dark" href="{% url 'department:home' %}">Department Management</a>
+        </li>
         <br>
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-                <a class="btn btn-dark" href="{% url 'department:home' %}">Department Management</a>
-            </li>
-            <br>
-            <li class="nav-item">
-                <a class="btn btn-dark" href="{% url 'employee:mgr_home' %}">Manager Management</a>
-            </li>
-            <br>
-        </ul>
+        <li class="nav-item">
+            <a class="btn btn-dark" href="{% url 'employee:mgr_home' %}">Manager Management</a>
+        </li>
+        <br>
+    </ul>
     {% elif user.is_manager %}
     <br>
     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-        <a class="btn btn-dark" href="{% url 'employee:teller_home' %}">Teller Management</a>
-    </li>
-    <br>
-    <li class="nav-item">
-        <a class="btn btn-dark" href="{% url 'employee:advisor_home' %}">Advisor Management</a>
-    </li>
+            <a class="btn btn-dark" href="{% url 'employee:teller_home' %}">Teller Management</a>
+        </li>
+        <br>
+        <li class="nav-item">
+            <a class="btn btn-dark" href="{% url 'employee:advisor_home' %}">Advisor Management</a>
+        </li>
     </ul>
     {% elif user.is_advisor %}
+
     {% elif user.is_teller %}
+    <br>
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+            <a class="btn btn-dark" href="{% url 'employee:customer_home' %}">Customer Management</a>
+        </li>
+    </ul>
     {% endif %}
 
 </div>
