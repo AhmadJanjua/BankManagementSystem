@@ -106,3 +106,9 @@ class AdvisorEditForm(EmployeeEditForm):
     class Meta:
         model = Advisor
         fields = EmployeeEditForm.Meta.fields + ('cpf_num', 'office_num')
+
+
+class EmployeePassForm(UserCreationForm):
+    class Meta:
+        model = Employee
+        fields = ()

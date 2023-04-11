@@ -40,6 +40,7 @@
       <th>
           <a class="btn btn-primary" href="{% url 'employee:teller_view' tlr_id=teller.id %}">Details</a>
           <a class="btn btn-secondary" href="{% url 'employee:teller_edit' tlr_id=teller.id %}">Edit</a>
+          <a class="btn btn-secondary" href="{% url 'employee:emp_pass' emp_id=teller.id %}">Change Password</a>
           <a class="btn btn-warning" href="{% url 'employee:teller_delete' tlr_id=teller.id %}">Delete</a>
       </th>
     </tr>

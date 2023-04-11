@@ -7,6 +7,8 @@ from customer.models import Customer
 from loan.models import Loan
 from transaction.models import Transaction
 from account.models import Savings, Chequing
+
+
 # create an employee using a supplied form
 def create_employee(request, title, header, button, form_class):
     # make sure the request is made by a Manager
@@ -33,6 +35,7 @@ def create_employee(request, title, header, button, form_class):
     else:
         return redirect('home:home')
 
+
 # pass in a form and information to be rendered
 @login_required
 def create_teller(request):
@@ -40,6 +43,7 @@ def create_teller(request):
     header = 'Create Teller'
     button = 'Submit'
     return create_employee(request, title, header, button, TellerForm)
+
 
 # pass in a form and information to be rendered
 @login_required
@@ -50,38 +54,32 @@ def create_advisor(request):
     return create_employee(request, title, header, button, AdvisorForm)
 
 
-def manage_employees(request):
-    if request.method == "POST":
-        id = request.POST.get('id')
-        if id:
-            Employee.objects.get(pk=id).update(dept=None)
-    department_managed = Department.objects.filter(dept_mgr=request.user)
-    Dnos = department_managed.values('DNO')
-    Dn = Dnos[0]
-    Rez = Dn.get('DNO')
-    employees = Employee.objects.filter(is_staff=True,dept=Rez).exclude(is_superuser=True, manager__isnull=False)
-    return render(request, 'manage_employees.html', {'employees': employees})
 
-
-def remove_employee(request, id):
-    Employee.objects.filter(id=id).update(on_probation=True) 
-    department_managed = Department.objects.filter(dept_mgr=request.user)
-    Dnos = department_managed.values('DNO')
-    Dn = Dnos[0]
-    Rez = Dn.get('DNO')
-    employees = Employee.objects.filter(is_staff=True,dept=Rez).exclude(is_superuser=True, manager__isnull=False)
-    return redirect('home:home')
-
-
-def restore_employee(request, id):
-    Employee.objects.filter(id=id).update(on_probation=False) 
-    department_managed = Department.objects.filter(dept_mgr=request.user)
-    Dnos = department_managed.values('DNO')
-    Dn = Dnos[0]
-    Rez = Dn.get('DNO')
-    employees = Employee.objects.filter(is_staff=True,dept=Rez).exclude(is_superuser=True, manager__isnull=False)
-    return redirect('employee:manage_employees')
-
+@login_required
+def employee_password(request, emp_id):
+    # if the user is not admin they cannot edit a manager
+    if not request.user.is_superuser:
+        return redirect('home:home')
+    # populate the render fields
+    title = 'Update'
+    header = 'Update Manager'
+    button = 'Submit'
+    # Retrieve the model instance to be updated
+    emp = get_object_or_404(Employee, id=emp_id)
+    if request.method == 'POST':
+        # Create a form instance with the submitted data
+        form = EmployeePassForm(request.POST, request.FILES, instance=emp)
+        if form.is_valid():
+            # Save the updated model instance
+            form.save()
+            # Redirect to the detail view of the updated model instance
+            return redirect('employee:mgr_home')
+    else:
+        # Create a form instance with the data from the model instance to be updated
+        form = EmployeePassForm(instance=emp)
+    # Render the update form template with the form and model instance
+    return render(request, '../templates/render_form.html',
+                  {'form': form, 'title': title, 'header': header, 'button': button})
 
 ########### Manager Management
 
@@ -164,7 +162,6 @@ def mgr_edit(request, mgr_id):
     # Render the update form template with the form and model instance
     return render(request, '../templates/render_form.html',
                   {'form': form, 'title': title, 'header': header, 'button': button})
-
 
 
 # delete the manager
