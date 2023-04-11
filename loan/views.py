@@ -67,11 +67,7 @@ def delete_loan(request,loanNo):
         return redirect('home:home')
     loan = Loan.objects.get(pk=loanNo)
     loan.delete()
-    previous_url = request.META.get('HTTP_REFERER')
-    if previous_url:
-        return redirect(previous_url,)
-    else:
-        return redirect('employee:customer_home')
+    return redirect('employee:customer_home')
 
 def view_loan_transactions(request,loanNo):
     try:

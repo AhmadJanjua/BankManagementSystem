@@ -89,12 +89,7 @@ def edit(request, dept_id):
                 # Save the updated model instance
                 form.save()
                 # redirect
-                previous_url = request.META.get('HTTP_REFERER')
-                if previous_url:
-                    return redirect(previous_url, )
-                else:
-                    # reload the posts page
-                    return redirect('department:home')
+                return redirect('department:home')
         else:
             # Create a form instance with the data from the model instance to be updated
             form = DepartmentForm(instance=dept)
@@ -114,14 +109,8 @@ def delete(request, dept_id):
             dept = get_object_or_404(Department, DNO=dept_id)
             # Otherwise delete
             dept.delete()
-            # Get the previous page url (search or main page)
-            previous_url = request.META.get('HTTP_REFERER')
-            # Go to the previous page if found
-            if previous_url:
-                return redirect(previous_url)
-            # Otherwise go to the department home
-            else:
-                return redirect('department:home')
+            # redirect to home
+            return redirect('department:home')
         # Otherwise redirect to the main homepage
         else:
             return redirect('home:home')

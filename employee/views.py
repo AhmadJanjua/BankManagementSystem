@@ -1,14 +1,14 @@
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from department.models import Department
 from .forms import *
 from .models import Employee
-from django.contrib.auth.decorators import user_passes_test
 from customer.models import Customer
 from loan.models import Loan
 from transaction.models import Transaction
 from account.models import Savings, Chequing
+
+
 # create an employee using a supplied form
 def create_employee(request, title, header, button, form_class):
     # make sure the request is made by a Manager
@@ -35,6 +35,7 @@ def create_employee(request, title, header, button, form_class):
     else:
         return redirect('home:home')
 
+
 # pass in a form and information to be rendered
 @login_required
 def create_teller(request):
@@ -42,6 +43,7 @@ def create_teller(request):
     header = 'Create Teller'
     button = 'Submit'
     return create_employee(request, title, header, button, TellerForm)
+
 
 # pass in a form and information to be rendered
 @login_required
@@ -52,38 +54,32 @@ def create_advisor(request):
     return create_employee(request, title, header, button, AdvisorForm)
 
 
-def manage_employees(request):
-    if request.method == "POST":
-        id = request.POST.get('id')
-        if id:
-            Employee.objects.get(pk=id).update(dept=None)
-    department_managed = Department.objects.filter(dept_mgr=request.user)
-    Dnos = department_managed.values('DNO')
-    Dn = Dnos[0]
-    Rez = Dn.get('DNO')
-    employees = Employee.objects.filter(is_staff=True,dept=Rez).exclude(is_superuser=True, manager__isnull=False)
-    return render(request, 'manage_employees.html', {'employees': employees})
 
-
-def remove_employee(request, id):
-    Employee.objects.filter(id=id).update(on_probation=True) 
-    department_managed = Department.objects.filter(dept_mgr=request.user)
-    Dnos = department_managed.values('DNO')
-    Dn = Dnos[0]
-    Rez = Dn.get('DNO')
-    employees = Employee.objects.filter(is_staff=True,dept=Rez).exclude(is_superuser=True, manager__isnull=False)
-    return redirect('home:home')
-
-
-def restore_employee(request, id):
-    Employee.objects.filter(id=id).update(on_probation=False) 
-    department_managed = Department.objects.filter(dept_mgr=request.user)
-    Dnos = department_managed.values('DNO')
-    Dn = Dnos[0]
-    Rez = Dn.get('DNO')
-    employees = Employee.objects.filter(is_staff=True,dept=Rez).exclude(is_superuser=True, manager__isnull=False)
-    return redirect('employee:manage_employees')
-
+@login_required
+def employee_password(request, emp_id):
+    # if the user is not admin they cannot edit a manager
+    if not request.user.is_superuser:
+        return redirect('home:home')
+    # populate the render fields
+    title = 'Update'
+    header = 'Update Manager'
+    button = 'Submit'
+    # Retrieve the model instance to be updated
+    emp = get_object_or_404(Employee, id=emp_id)
+    if request.method == 'POST':
+        # Create a form instance with the submitted data
+        form = EmployeePassForm(request.POST, request.FILES, instance=emp)
+        if form.is_valid():
+            # Save the updated model instance
+            form.save()
+            # Redirect to the detail view of the updated model instance
+            return redirect('employee:mgr_home')
+    else:
+        # Create a form instance with the data from the model instance to be updated
+        form = EmployeePassForm(instance=emp)
+    # Render the update form template with the form and model instance
+    return render(request, '../templates/render_form.html',
+                  {'form': form, 'title': title, 'header': header, 'button': button})
 
 ########### Manager Management
 
@@ -143,11 +139,8 @@ def mgr_info(request, mgr_id):
 # edit manager fields
 @login_required
 def mgr_edit(request, mgr_id):
-    # check if the user is logged in
-    if not request.user.is_authenticated:
-        return redirect('login')
     # if the user is not admin they cannot edit a manager
-    elif not request.user.is_superuser:
+    if not request.user.is_superuser:
         return redirect('home:home')
     # populate the render fields
     title = 'Update'
@@ -157,20 +150,15 @@ def mgr_edit(request, mgr_id):
     mgr = get_object_or_404(Manager, id=mgr_id)
     if request.method == 'POST':
         # Create a form instance with the submitted data
-        form = ManagerForm(request.POST, request.FILES, instance=mgr,user=request.user)
+        form = ManagerEditForm(request.POST, request.FILES, instance=mgr)
         if form.is_valid():
             # Save the updated model instance
             form.save()
-            # redirect to previous url
-            previous_url = request.META.get('HTTP_REFERER')
-            if previous_url:
-                return redirect(previous_url, )
-            else:
-                # reload the posts page
-                return redirect('employee:mgr_home')
+            # Redirect to the detail view of the updated model instance
+            return redirect('employee:mgr_home')
     else:
         # Create a form instance with the data from the model instance to be updated
-        form = EmployeeForm(instance=mgr,user=request.user)
+        form = ManagerEditForm(instance=mgr)
     # Render the update form template with the form and model instance
     return render(request, '../templates/render_form.html',
                   {'form': form, 'title': title, 'header': header, 'button': button})
@@ -186,13 +174,8 @@ def mgr_delete(request, mgr_id):
     mgr = get_object_or_404(Manager, id=mgr_id)
     # delete the manager
     mgr.delete()
-    # redirect to previous page
-    previous_url = request.META.get('HTTP_REFERER')
-    if previous_url:
-        return redirect(previous_url, )
-    else:
-        # reload the posts page
-        return redirect('employee:mgr_home')
+    # redirect to home
+    return redirect('employee:mgr_home')
 
 
 
@@ -260,20 +243,15 @@ def teller_edit(request, tlr_id):
     tlr = get_object_or_404(Teller, id=tlr_id)
     if request.method == 'POST':
         # Create a form instance with the submitted data
-        form = ManagerForm(request.POST, request.FILES, instance=tlr,user=request.user)
+        form = TellerEditForm(request.POST, request.FILES, instance=tlr)
         if form.is_valid():
             # Save the updated model instance
             form.save()
-            # redirect to previous url
-            previous_url = request.META.get('HTTP_REFERER')
-            if previous_url:
-                return redirect(previous_url, )
-            else:
-                # reload the posts page
-                return redirect('employee:teller_home')
+            # redirect to teller home
+            return redirect('employee:teller_home')
     else:
         # Create a form instance with the data from the model instance to be updated
-        form = TellerForm(instance=tlr,user=request.user)
+        form = TellerEditForm(instance=tlr)
     # Render the update form template with the form and model instance
     return render(request, '../templates/render_form.html',
                   {'form': form, 'title': title, 'header': header, 'button': button})
@@ -289,13 +267,8 @@ def teller_delete(request, tlr_id):
     tlr = get_object_or_404(Teller, id=tlr_id)
     # delete the teller
     tlr.delete()
-    # redirect to previous page
-    previous_url = request.META.get('HTTP_REFERER')
-    if previous_url:
-        return redirect(previous_url, )
-    else:
-        # reload the posts page
-        return redirect('employee:teller_home')
+    # redirect to home
+    return redirect('employee:teller_home')
 
 
 ########### Advisor Management (For Manager Use)
@@ -376,20 +349,15 @@ def advisor_edit(request, adv_id):
     adv = get_object_or_404(Advisor, id=adv_id)
     if request.method == 'POST':
         # Create a form instance with the submitted data
-        form = ManagerForm(request.POST, request.FILES, instance=adv,user=request.user)
+        form = AdvisorEditForm(request.POST, request.FILES, instance=adv)
         if form.is_valid():
             # Save the updated model instance
             form.save()
-            # redirect to previous url
-            previous_url = request.META.get('HTTP_REFERER')
-            if previous_url:
-                return redirect(previous_url, )
-            else:
-                # reload the posts page
-                return redirect('employee:advisor_home')
+            # redirect to home
+            return redirect('employee:advisor_home')
     else:
         # Create a form instance with the data from the model instance to be updated
-        form = AdvisorForm(instance=adv,user=request.user)
+        form = AdvisorEditForm(instance=adv, user=request.user)
     # Render the update form template with the form and model instance
     return render(request, '../templates/render_form.html',
                   {'form': form, 'title': title, 'header': header, 'button': button})
@@ -405,13 +373,8 @@ def advisor_delete(request, adv_id):
     adv = get_object_or_404(Advisor, id=adv_id)
     # delete the advisor
     adv.delete()
-    # redirect to previous page
-    previous_url = request.META.get('HTTP_REFERER')
-    if previous_url:
-        return redirect(previous_url, )
-    else:
-        # reload the posts page
-        return redirect('employee:advisor_home')
+    # redirect to home
+    return redirect('employee:advisor_home')
 
 ##### Customer Management (For Teller Use)
 
