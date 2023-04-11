@@ -6,6 +6,8 @@ from .forms import *
 from .models import Employee
 from django.contrib.auth.decorators import user_passes_test
 from customer.models import Customer
+from loan.models import Loan
+from transaction.models import Transaction
 
 # create an employee using a supplied form
 def create_employee(request, title, header, button, form_class):
@@ -434,3 +436,10 @@ def customer_search(request):
         customers = Customer.objects.none()
     #display results
     return render(request,'Customer_management/customer_search.html',{'searched':searched,'customers':customers})
+
+@login_required
+def customer_info(request,cus_id):
+    cus = get_object_or_404(Customer,ssn=cus_id)
+    cus_loans = Loan.objects.filter(customer=cus)
+    cus_transactions = Transaction.objects.filter(customer=cus)
+    return render(request,'Customer_management/customer_info.html',{'customer':cus,'transactions': cus_transactions,'loans':cus_loans})

@@ -32,7 +32,7 @@
         <th>postal code</th>
         <th>employment status</th>
         <th>credit score</th>
-        <th></th>
+        <th> Actions </th>
 
     </tr>
     {% for customer in customers %}
@@ -47,7 +47,9 @@
         <th> {{ customer.postal_code }}</th>
         <th> {{ customer.employment_status }}</th>
         <th> {{ customer.credit_score }}</th>
-
+        <th>
+            <a class="btn btn-primary" href="{% url 'employee:customer_info' cus_id=customer.ssn %}"> View </a>
+        </th>
     </tr>
     {% endfor %}
 </table>

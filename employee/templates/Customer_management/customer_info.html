@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %} Customer Info {% endblock %}
+
+{%block content%}
+<h1> Customer Information </h1>
+<br>
+
+
+<h3>Demographic Information </h3>
+<table class="table table-dark table-striped">
+    <tr>
+        <th>ssn</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>birthday</th>
+        <th>street</th>
+        <th>city</th>
+        <th>province</th>
+        <th>postal code</th>
+        <th>employment status</th>
+        <th>credit score</th>
+        <th></th>
+    </tr>
+    <tr>
+        <th> {{ customer.ssn }}</th>
+        <th> {{ customer.f_name }}</th>
+        <th> {{ customer.l_name }}</th>
+        <th> {{ customer.birthday }}</th>
+        <th> {{ customer.street }}</th>
+        <th> {{ customer.city }}</th>
+        <th> {{ customer.province }}</th>
+        <th> {{ customer.postal_code }}</th>
+        <th> {{ customer.employment_status }}</th>
+        <th> {{ customer.credit_score }}</th>
+    </tr>
+</table>
+
+
+
+{% if user.is_teller %}
+<h3> Transaction History </h3>
+
+<table class="table table-dark table-striped">
+    <tr>
+        <th>transaction no.</th>
+        <th>Amount</th>
+        <th> Date/Time </th>
+        <th> Account </th>
+        <th>Teller</th>
+        <th>Customer</th>
+        <th>Loan</th>
+    </tr>
+    {% for transaction in transactions %}
+    <tr>
+        <th> {{ transaction.transaction_num }}</th>
+        <th> {{ transaction.amount }}</th>
+        <th> {{ transaction.date_time }}</th>
+        <th> {{ transaction.account }}</th>
+        <th> {{ transaction.teller }}</th>
+        <th> {{ transaction.customer }}</th>
+        <th> {{ transaction.loan }}</th>
+    </tr>
+    {% endfor %}
+</table>
+
+
+{% elif user.is_advisor %}
+<h3> Loans </h3>
+
+<table class="table table-dark table-striped">
+    <tr>
+        <th>Loan no.</th>
+        <th>Term</th>
+        <th> Amount </th>
+        <th> Interest Rate </th>
+        <th>Type</th>
+        <th>Remaining</th>
+        <th>Advisor</th>
+        <th>Customer</th>
+        <th> Approved </th>
+    </tr>
+    {% for loan in loans %}
+    <tr>
+        <th> {{ loan.loan_num }}</th>
+        <th> {{ loan.term }}</th>
+        <th> {{ loan.amount }}</th>
+        <th> {{ loan.interest_rate }}</th>
+        <th> {{ loan.type }}</th>
+        <th> {{ loan.remaining }}</th>
+        <th> {{ loan.advisor }}</th>
+        <th> {{ loan.customer }}</th>
+        <th> {{ loan.approved }}</th>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endif %}
+
+{% endblock %}

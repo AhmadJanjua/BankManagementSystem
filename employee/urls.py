@@ -42,5 +42,6 @@ urlpatterns = [
 
     path('customer/home/',customer_home,name='customer_home'),
     path('customer/search/',customer_search,name='customer_search'),
+    path('customer/info/<str:cus_id>',customer_info,name='customer_info'),
 
 ]
