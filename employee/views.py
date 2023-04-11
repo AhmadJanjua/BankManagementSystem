@@ -151,7 +151,7 @@ def mgr_edit(request, mgr_id):
         return redirect('home:home')
     # populate the render fields
     title = 'Update'
-    header = 'Update Department'
+    header = 'Update Manager'
     button = 'Submit'
     # Retrieve the model instance to be updated
     mgr = get_object_or_404(Manager, id=mgr_id)
@@ -254,7 +254,7 @@ def teller_edit(request, tlr_id):
         return redirect('home:home')
     # populate the render fields
     title = 'Update'
-    header = 'Update Department'
+    header = 'Update Teller'
     button = 'Submit'
     # Retrieve the model instance to be updated
     tlr = get_object_or_404(Teller, id=tlr_id)
@@ -370,7 +370,7 @@ def advisor_edit(request, adv_id):
         return redirect('home:home')
     # populate the render fields
     title = 'Update'
-    header = 'Update Department'
+    header = 'Update Advisor'
     button = 'Submit'
     # Retrieve the model instance to be updated
     adv = get_object_or_404(Advisor, id=adv_id)
