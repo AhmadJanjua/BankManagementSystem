@@ -107,4 +107,53 @@
 
 {% endif %}
 
+<br>
+<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <li class="nav-item">
+        <a class="btn btn-dark" href="{% url 'account:create_savings' cid=customer.ssn %}">Create Savings Account </a>
+    </li>
+</ul>
+<br>
+<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <li class="nav-item">
+        <a class="btn btn-dark" href="{% url 'account:create_chequing' cid=customer.ssn %}">Create Chequing Account </a>
+    </li>
+</ul>
+
+<h3> Chequing Accounts </h3>
+
+<table class="table table-dark table-striped">
+    <tr>
+        <th>account no.</th>
+        <th>balance</th>
+        <th> monthly_fee </th>
+    </tr>
+    {% for account in chequing %}
+    <tr>
+        <th> {{ account.account_num }}</th>
+        <th> {{ account.balance }}</th>
+        <th> {{ account.monthly_fee }}</th>
+    </tr>
+    {% endfor %}
+
+</table>
+
+<h3> Savings Accounts </h3>
+
+<table class="table table-dark table-striped">
+    <tr>
+        <th>account no.</th>
+        <th>balance</th>
+        <th> interest_Rate </th>
+    </tr>
+    {% for account in saving %}
+    <tr>
+        <th> {{ account.account_num }}</th>
+        <th> {{ account.balance }}</th>
+        <th> {{ account.interest_rate }}</th>
+    </tr>
+    {% endfor %}
+
+</table>
+
 {% endblock %}

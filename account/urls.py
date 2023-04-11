@@ -5,6 +5,6 @@ from .views import *
 app_name = 'account'
 # directs the urls from root
 urlpatterns = [
-    path('savings/create/', create_savings, name='create_savings'),
-    path('chequing/create', create_chequing, name='create_chequing'),
+    path('savings/create/<str:cid>', create_savings, name='create_savings'),
+    path('chequing/create/<str:cid>', create_chequing, name='create_chequing'),
 ]

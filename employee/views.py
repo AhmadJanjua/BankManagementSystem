@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import user_passes_test
 from customer.models import Customer
 from loan.models import Loan
 from transaction.models import Transaction
-
+from account.models import Savings, Chequing
 # create an employee using a supplied form
 def create_employee(request, title, header, button, form_class):
     # make sure the request is made by a Manager
@@ -442,4 +442,6 @@ def customer_info(request,cus_id):
     cus = get_object_or_404(Customer,ssn=cus_id)
     cus_loans = Loan.objects.filter(customer=cus)
     cus_transactions = Transaction.objects.filter(customer=cus)
-    return render(request,'Customer_management/customer_info.html',{'customer':cus,'transactions': cus_transactions,'loans':cus_loans})
+    cus_savings_accounts = Savings.objects.filter(customer=cus)
+    cus_chequing_accounts = Chequing.objects.filter(customer=cus)
+    return render(request,'Customer_management/customer_info.html',{'customer':cus,'transactions': cus_transactions,'loans':cus_loans,'chequing':cus_chequing_accounts, 'saving':cus_savings_accounts})
