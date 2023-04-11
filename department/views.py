@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Department
 from .forms import DepartmentForm
 from employee.models import Manager
-
+import re
 
 @login_required
 def create_department(request):
@@ -105,24 +105,28 @@ def edit(request, dept_id):
         return redirect('home:home')
 
 
-# delete a department
 @login_required
 def delete(request, dept_id):
-    # check if the user is an admin
-    if request.user.is_superuser:
-        # if there is no object with that id, direct to a no object page
-        dept = get_object_or_404(Department, DNO=dept_id)
-        # otherwise delete
-        dept.delete()
-        # get the previous page url (search or main page)
-        previous_url = request.META.get('HTTP_REFERER')
-        # go to the previous page if found
-        if previous_url:
-            return redirect(previous_url, )
-        # otherwise go to the department home
+    try:
+        # Check if the user is an admin
+        if request.user.is_superuser:
+            # If there is no object with that id, direct to a no object page
+            dept = get_object_or_404(Department, DNO=dept_id)
+            # Otherwise delete
+            dept.delete()
+            # Get the previous page url (search or main page)
+            previous_url = request.META.get('HTTP_REFERER')
+            # Go to the previous page if found
+            if previous_url:
+                return redirect(previous_url)
+            # Otherwise go to the department home
+            else:
+                return redirect('department:home')
+        # Otherwise redirect to the main homepage
         else:
-            # reload the posts page
-            return redirect('department:home')
-    # otherwise redirect to the main homepage
-    else:
-        return redirect('home:home')
+            return redirect('home:home')
+    except Exception as e:
+        # Extract only the numbers from the error message
+        numbers = re.findall(r'\d+', str(e))
+        # Render an error page with the extracted numbers
+        return render(request, 'error.html', {'numbers': numbers})

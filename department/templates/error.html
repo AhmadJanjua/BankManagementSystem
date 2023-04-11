@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-12 mt-5">
+			<div class="alert alert-danger" role="alert">
+				<p>Error, you cannot delete that department, as employee(s) with ID {{ numbers }} are still enclosed with that department. The department must be empty in order to remove it.</p>
+			</div>
+			<div class="error-image-container">
+				<img src="https://www.freeiconspng.com/thumbs/error-icon/error-icon-7.png" alt="Error Image">
+			</div>
+		</div>
+	</div>
+</div>
+<style>
+.alert-danger {
+	border-radius: 5px;
+	padding: 20px;
+	color: #721c24;
+	background-color: #f8d7da;
+	border-color: #f5c6cb;
+	text-align: center;
+	font-size: 24px;
+	font-weight: bold;
+}
+.error-image-container {
+	margin-top: 50px;
+	text-align: center;
+}
+.error-image-container img {
+	max-width: 100%;
+	height: auto;
+}
+</style>
+{% endblock %}
