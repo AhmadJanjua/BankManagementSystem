@@ -7,32 +7,32 @@ from .models import Employee
 
 
 # create an employee using a supplied form
-@login_required
 def create_employee(request, title, header, button, form_class):
     # make sure the request is made by a Manager
-    try:
-        Manager.objects.get(pk=request.user.id)
-    except:
-        return redirect('home:home')
-    # check if the request is POST
-    if request.method == 'POST':
-        # keep a copy of the signup fill info
-        form = form_class(request.POST)
-        # make sure there are no errors
-        if form.is_valid():
-            # create a user object without submitting it to the database
-            user = form.save(commit=False)
-            # make sure the user is active
-            user.is_active = True
-            # commit the user to the database
-            user.save()
-            # render the success page
-            return render(request, '../templates/success.html')
+    if Manager.objects.filter(pk=request.user.id).exists():
+        # check if the request is POST
+        if request.method == 'POST':
+            # keep a copy of the signup fill info
+            form = form_class(request.POST, user=request.user)  # pass the current user to the form
+            # make sure there are no errors
+            if form.is_valid():
+                # create a user object without submitting it to the database
+                user = form.save(commit=False)
+                # make sure the user is active
+                user.is_active = True
+                # commit the user to the database
+                user.save()
+                # render the success page
+                return render(request, '../templates/success.html')
+        else:
+            # if the form wasn't filled before, make a new empty form.
+            form = form_class(user=request.user)  # pass the current user to the form
+        # Display the form using signup html and form
+        return render(request, '../templates/render_form.html', {'form': form, 'title':title, 'header': header, 'button':button})
     else:
-        # if the form wasn't filled before, make a new empty form.
-        form = form_class()
-    # Display the form using signup html and form
-    return render(request, '../templates/render_form.html', {'form': form, 'title':title, 'header': header, 'button':button})
+        return redirect('home:home')
+
+
 
 
 # pass in a form and information to be rendered
