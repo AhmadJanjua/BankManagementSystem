@@ -26,7 +26,7 @@ class EmployeeForm(UserCreationForm):
 
     class Meta:
         model = Employee
-        fields = ('ssn', 'dept', 'f_name', 'l_name', 'birthday', 'street', 'city', 'province', 'postal_code')
+        fields = ('ssn', 'dept', 'f_name', 'l_name', 'birthday', 'street', 'city', 'province', 'postal_code', 'supervisor')
 
 
 
@@ -41,7 +41,7 @@ class ManagerForm(EmployeeForm):
 class TellerForm(EmployeeForm):
     class Meta:
         model = Teller
-        fields = ('ssn', 'dept', 'f_name', 'l_name', 'birthday', 'street', 'city', 'province', 'postal_code')
+        fields = ('ssn', 'dept', 'f_name', 'l_name', 'birthday', 'street', 'city', 'province', 'postal_code','supervisor')
 
 
 # make an advisor form
@@ -51,4 +51,4 @@ class AdvisorForm(EmployeeForm):
     class Meta:
         model = Advisor
         fields = ('ssn', 'dept', 'f_name', 'l_name', 'birthday', 'street', 'city', 'province', 'postal_code', 'cpf_num',
-                  'office_num')
+                  'office_num','supervisor')
