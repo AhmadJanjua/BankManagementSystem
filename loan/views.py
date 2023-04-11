@@ -1,10 +1,11 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from employee.models import Advisor
+from customer.models import Customer
 from .forms import LoanForm
 # Create your views here.
 @login_required
-def create_loan(request):
+def create_loan(request,cid):
     try:
         Advisor.objects.get(pk=request.user.id)
     except:
@@ -22,7 +23,8 @@ def create_loan(request):
             #create a loan object without submitting it to the database
             loan = form.save(commit=False)
             # need to modify attributes here before saving the loan
-            loan.advisor = request.user
+            loan.customer = get_object_or_404(Customer,ssn=cid)
+            loan.advisor = Advisor.objects.get(id = request.user.id)
             loan.remaining = loan.amount
             #commit the loan to the database
             loan.save()

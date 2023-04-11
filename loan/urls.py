@@ -5,5 +5,5 @@ from .views import create_loan
 app_name = 'loan'
 # directs the urls from root
 urlpatterns = [
-    path('create_loan/', create_loan , name='create_loan'),
+    path('create_loan/<str:cid>', create_loan , name='create_loan'),
 ]

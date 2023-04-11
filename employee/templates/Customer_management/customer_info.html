@@ -93,7 +93,17 @@
         <th> {{ loan.approved }}</th>
     </tr>
     {% endfor %}
+
+
+
 </table>
+
+<br>
+<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <li class="nav-item">
+        <a class="btn btn-dark" href="{% url 'loan:create_loan' cid=customer.ssn %}">Create a loan </a>
+    </li>
+</ul>
 
 {% endif %}
 
