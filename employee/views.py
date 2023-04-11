@@ -1,10 +1,8 @@
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from department.models import Department
 from .forms import *
 from .models import Employee
-from django.contrib.auth.decorators import user_passes_test
 from customer.models import Customer
 from loan.models import Loan
 from transaction.models import Transaction
@@ -143,11 +141,8 @@ def mgr_info(request, mgr_id):
 # edit manager fields
 @login_required
 def mgr_edit(request, mgr_id):
-    # check if the user is logged in
-    if not request.user.is_authenticated:
-        return redirect('login')
     # if the user is not admin they cannot edit a manager
-    elif not request.user.is_superuser:
+    if not request.user.is_superuser:
         return redirect('home:home')
     # populate the render fields
     title = 'Update'
@@ -157,18 +152,19 @@ def mgr_edit(request, mgr_id):
     mgr = get_object_or_404(Manager, id=mgr_id)
     if request.method == 'POST':
         # Create a form instance with the submitted data
-        form = ManagerForm(request.POST, request.FILES, instance=mgr,user=request.user)
+        form = ManagerEditForm(request.POST, request.FILES, instance=mgr)
         if form.is_valid():
             # Save the updated model instance
             form.save()
-            # redirect to home
+            # Redirect to the detail view of the updated model instance
             return redirect('employee:mgr_home')
     else:
         # Create a form instance with the data from the model instance to be updated
-        form = EmployeeForm(instance=mgr,user=request.user)
+        form = ManagerEditForm(instance=mgr)
     # Render the update form template with the form and model instance
     return render(request, '../templates/render_form.html',
                   {'form': form, 'title': title, 'header': header, 'button': button})
+
 
 
 # delete the manager
@@ -250,7 +246,7 @@ def teller_edit(request, tlr_id):
     tlr = get_object_or_404(Teller, id=tlr_id)
     if request.method == 'POST':
         # Create a form instance with the submitted data
-        form = ManagerForm(request.POST, request.FILES, instance=tlr,user=request.user)
+        form = TellerEditForm(request.POST, request.FILES, instance=tlr)
         if form.is_valid():
             # Save the updated model instance
             form.save()
@@ -258,7 +254,7 @@ def teller_edit(request, tlr_id):
             return redirect('employee:teller_home')
     else:
         # Create a form instance with the data from the model instance to be updated
-        form = TellerForm(instance=tlr,user=request.user)
+        form = TellerEditForm(instance=tlr)
     # Render the update form template with the form and model instance
     return render(request, '../templates/render_form.html',
                   {'form': form, 'title': title, 'header': header, 'button': button})
@@ -356,7 +352,7 @@ def advisor_edit(request, adv_id):
     adv = get_object_or_404(Advisor, id=adv_id)
     if request.method == 'POST':
         # Create a form instance with the submitted data
-        form = ManagerForm(request.POST, request.FILES, instance=adv,user=request.user)
+        form = AdvisorEditForm(request.POST, request.FILES, instance=adv)
         if form.is_valid():
             # Save the updated model instance
             form.save()
@@ -364,7 +360,7 @@ def advisor_edit(request, adv_id):
             return redirect('employee:advisor_home')
     else:
         # Create a form instance with the data from the model instance to be updated
-        form = AdvisorForm(instance=adv,user=request.user)
+        form = AdvisorEditForm(instance=adv, user=request.user)
     # Render the update form template with the form and model instance
     return render(request, '../templates/render_form.html',
                   {'form': form, 'title': title, 'header': header, 'button': button})

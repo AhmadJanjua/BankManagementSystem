@@ -7,7 +7,7 @@ from .models import Employee, Teller, Advisor, Manager, Department
 class DateInput(forms.DateInput):
     input_type = 'date'
 
-
+# Create a subclass that inherits from employee form
 class EmployeeForm(UserCreationForm):
     birthday = forms.DateField(widget=DateInput)
 
@@ -29,8 +29,6 @@ class EmployeeForm(UserCreationForm):
         fields = ('ssn', 'dept', 'f_name', 'l_name', 'birthday', 'street', 'city', 'province', 'postal_code', 'supervisor')
 
 
-
-# Create a manager form that inherits from employee form
 class ManagerForm(EmployeeForm):
     class Meta:
         model = Manager
@@ -50,5 +48,61 @@ class AdvisorForm(EmployeeForm):
 
     class Meta:
         model = Advisor
-        fields = ('ssn', 'dept', 'f_name', 'l_name', 'birthday', 'street', 'city', 'province', 'postal_code', 'cpf_num',
-                  'office_num','supervisor')
+        fields = EmployeeForm.Meta.fields + ('cpf_num', 'office_num')
+
+
+# Edit Employees
+class EmployeeEditForm(forms.Form):
+    birthday = forms.DateField(widget=DateInput)
+
+    class Meta:
+        model = Employee
+        fields = ('ssn', 'dept', 'f_name', 'l_name', 'birthday', 'street', 'city', 'province', 'postal_code', 'supervisor')
+
+
+class TellerEditForm(EmployeeEditForm):
+    class Meta:
+        model = Teller
+        fields = EmployeeEditForm.Meta.fields
+
+
+class ManagerEditForm(EmployeeEditForm):
+    class Meta:
+        model = Manager
+        fields = EmployeeEditForm.Meta.fields
+
+
+class AdvisorEditForm(EmployeeEditForm):
+    birthday = forms.DateField(widget=DateInput)
+
+    class Meta:
+        model = Advisor
+        fields = EmployeeEditForm.Meta.fields + ('cpf_num', 'office_num')
+
+
+# Change Password
+class EmployeeEditForm(forms.ModelForm):
+    birthday = forms.DateField(widget=DateInput)
+
+    class Meta:
+        model = Employee
+        fields = ('ssn', 'dept', 'f_name', 'l_name', 'birthday', 'street', 'city', 'province', 'postal_code', 'supervisor')
+
+class TellerEditForm(EmployeeEditForm):
+    class Meta:
+        model = Teller
+        fields = EmployeeEditForm.Meta.fields
+
+
+class ManagerEditForm(EmployeeEditForm):
+    class Meta:
+        model = Manager
+        fields = EmployeeEditForm.Meta.fields
+
+
+class AdvisorEditForm(EmployeeEditForm):
+    birthday = forms.DateField(widget=DateInput)
+
+    class Meta:
+        model = Advisor
+        fields = EmployeeEditForm.Meta.fields + ('cpf_num', 'office_num')
