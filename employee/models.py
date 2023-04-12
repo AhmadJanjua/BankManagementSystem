@@ -93,6 +93,7 @@ class Employee(AbstractBaseUser, Person, PermissionsMixin):
     id = models.AutoField(primary_key=True)
     start_date = models.DateField(auto_now=True)
     supervisor = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
+    # must remove employees or give an employee a different department
     dept = models.ForeignKey(Department, null=False, on_delete=models.PROTECT)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)

@@ -14,7 +14,7 @@ class Loan(models.Model):
     type = models.CharField(null=False, max_length=50)
     remaining = models.DecimalField(max_digits=20, decimal_places=2)
     # reassign loan to others
-    advisor = models.ForeignKey(Advisor, on_delete=models.PROTECT)
+    advisor = models.ForeignKey(Advisor, null=True, on_delete=models.SET_NULL)
     # customer must pay off loans
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
     approved = models.BooleanField(default=False)

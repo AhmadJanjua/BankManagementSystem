@@ -16,4 +16,3 @@ class CustomerForm(forms.ModelForm):
         model = Customer
         fields = ('ssn', 'f_name', 'l_name', 'birthday', 'street', 'city', 'province', 'postal_code',
                   'employment_status', 'credit_score')
-                  

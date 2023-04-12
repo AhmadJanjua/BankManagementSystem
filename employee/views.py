@@ -62,7 +62,7 @@ def employee_password(request, emp_id):
         return redirect('home:home')
     # populate the render fields
     title = 'Update'
-    header = 'Update Employee'
+    header = 'Change Password'
     button = 'Submit'
     # Retrieve the model instance to be updated
     emp = get_object_or_404(Employee, id=emp_id)
