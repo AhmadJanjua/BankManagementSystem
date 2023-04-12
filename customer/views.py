@@ -78,7 +78,7 @@ def customer_edit(request, cus_id):
             # Save the updated model instance
             form.save()
             # redirect to home
-            return redirect('customer:home')
+            return redirect('customer:customer_home')
     else:
         # Create a form instance with the data from the model instance to be updated
         form = CustomerForm(instance=cus)
