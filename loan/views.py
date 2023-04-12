@@ -58,7 +58,8 @@ def view_modify_loan(request,loanNo):
             return render(request,'../templates/success.html')
     else:    
         form = LoanForm(instance=loan)
-        return render(request,'../templates/render_form.html',{'form':form, 'title': 'Loan','header': 'modify loan', 'button': 'Submit'})
+        return render(request,'../templates/render_form.html',{'form':form, 'title': 'Loan','header': 'Modify Loan', 'button': 'Submit'})
+
 
 def delete_loan(request,loanNo):
     try:
@@ -69,7 +70,8 @@ def delete_loan(request,loanNo):
     loan.delete()
     return redirect('employee:customer_home')
 
-def view_loan_transactions(request,loanNo):
+
+def view_loan_transactions(request, loanNo):
     try:
         Advisor.objects.get(pk=request.user.id)
     except:
