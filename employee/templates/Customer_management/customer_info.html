@@ -6,6 +6,19 @@
 <h1> Customer Information </h1>
 <br>
 
+
+<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <li class="nav-item">
+        <a class="btn btn-dark" href="{% url 'loan:create_loan' cid=customer.ssn %}">Create a loan </a>
+        &nbsp;
+        <a class="btn btn-dark" href="{% url 'account:create_savings' cid=customer.ssn %}">Create Savings Account </a>
+        &nbsp;
+        <a class="btn btn-dark" href="{% url 'account:create_chequing' cid=customer.ssn %}">Create Chequing Account </a>
+        &nbsp;
+    </li>
+</ul>
+<br>
+
 <h3>Demographic Information </h3>
 <table class="table table-dark table-striped">
     <tr>
@@ -59,66 +72,7 @@
     {% endfor %}
 </table>
 <br>
-
-{% elif user.is_advisor %}
-<h3> Loans </h3>
-<table class="table table-dark table-striped">
-    <tr>
-        <th>Loan no.</th>
-        <th>Term</th>
-        <th> Amount </th>
-        <th> Interest Rate </th>
-        <th>Type</th>
-        <th>Remaining</th>
-        <th>Advisor</th>
-        <th>Customer</th>
-        <th> Approved </th>
-        <th> Actions </th>
-    </tr>
-    {% for loan in loans %}
-    <tr>
-        <th> {{ loan.loan_num }}</th>
-        <th> {{ loan.term }}</th>
-        <th> {{ loan.amount }}</th>
-        <th> {{ loan.interest_rate }}</th>
-        <th> {{ loan.type }}</th>
-        <th> {{ loan.remaining }}</th>
-        <th> {{ loan.advisor }}</th>
-        <th> {{ loan.customer }}</th>
-        <th> {{ loan.approved }}</th>
-        <th>
-            <a class="btn btn-warning" href="{% url 'loan:view_modify_loan' loanNo=loan.loan_num %}"> Edit </a>
-            <a class="btn btn-danger" href="{% url 'loan:delete_loan' loanNo=loan.loan_num %}"> Delete </a>
-            <a class="btn btn-primary" href="{% url 'loan:view_loan_transactions' loanNo=loan.loan_num %}"> View
-                Transactions </a>
-        </th>
-    </tr>
-    {% endfor %}
-</table>
-<br>
-
-<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-    <li class="nav-item">
-        <a class="btn btn-dark" href="{% url 'loan:create_loan' cid=customer.ssn %}">Create a loan </a>
-    </li>
-</ul>
-<br>
-<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-    <li class="nav-item">
-        <a class="btn btn-dark" href="{% url 'account:create_savings' cid=customer.ssn %}">Create Savings Account </a>
-    </li>
-</ul>
-<br>
-<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-    <li class="nav-item">
-        <a class="btn btn-dark" href="{% url 'account:create_chequing' cid=customer.ssn %}">Create Chequing Account </a>
-    </li>
-</ul>
-<br>
-
-{% endif %}
-
-<h3> Chequing Accounts </h3>
+    <h3> Chequing Accounts </h3>
 
 <table class="table table-dark table-striped">
     <tr>
@@ -172,5 +126,44 @@
     {% endfor %}
 
 </table>
+
+{% elif user.is_advisor %}
+<h3> Loans </h3>
+<table class="table table-dark table-striped">
+    <tr>
+        <th>Loan no.</th>
+        <th>Term</th>
+        <th> Amount </th>
+        <th> Interest Rate </th>
+        <th>Type</th>
+        <th>Remaining</th>
+        <th>Advisor</th>
+        <th>Customer</th>
+        <th> Approved </th>
+        <th> Actions </th>
+    </tr>
+    {% for loan in loans %}
+    <tr>
+        <th> {{ loan.loan_num }}</th>
+        <th> {{ loan.term }}</th>
+        <th> {{ loan.amount }}</th>
+        <th> {{ loan.interest_rate }}</th>
+        <th> {{ loan.type }}</th>
+        <th> {{ loan.remaining }}</th>
+        <th> {{ loan.advisor }}</th>
+        <th> {{ loan.customer }}</th>
+        <th> {{ loan.approved }}</th>
+        <th>
+            <a class="btn btn-warning" href="{% url 'loan:view_modify_loan' loanNo=loan.loan_num %}"> Edit </a>
+            <a class="btn btn-danger" href="{% url 'loan:delete_loan' loanNo=loan.loan_num %}"> Delete </a>
+            <a class="btn btn-primary" href="{% url 'loan:view_loan_transactions' loanNo=loan.loan_num %}"> View
+                Transactions </a>
+        </th>
+    </tr>
+    {% endfor %}
+</table>
+<br>
+
+{% endif %}
 
 {% endblock %}

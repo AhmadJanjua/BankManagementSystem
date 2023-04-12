@@ -1,6 +1,9 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from . import validator
+from django.utils import timezone
+from dateutil.relativedelta import relativedelta
 from department.models import Department
 
 
@@ -71,7 +74,9 @@ class Person(models.Model):
     ssn = models.CharField(max_length=12, unique=True, null=False, validators=[validator.validate_ssn])
     f_name = models.CharField(max_length=50, null=False)
     l_name = models.CharField(max_length=50, null=False)
-    birthday = models.DateField(null=False)
+    birthday = models.DateField(null=False,
+                                validators=[MinValueValidator(timezone.now().date() - relativedelta(years=150)),
+                                            MaxValueValidator(timezone.now().date() - relativedelta(years=16))])
     street = models.CharField(max_length=100, null=False)
     city = models.CharField(max_length=100, null=False)
     province = models.CharField(max_length=100, null=False)

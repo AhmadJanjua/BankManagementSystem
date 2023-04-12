@@ -28,21 +28,6 @@
             <a class="btn btn-dark" href="{% url 'employee:advisor_home' %}">Advisor Management</a>
         </li>
     </ul>
-    {% elif user.is_advisor %}
-    <br>
-    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-            <a class="btn btn-dark" href="{% url 'employee:customer_home' %}">Customer Management</a>
-        </li>
-    </ul>
-    {% elif user.is_teller %}
-    <br>
-    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-            <a class="btn btn-dark" href="{% url 'employee:customer_home' %}">Customer Management</a>
-        </li>
-    </ul>
     {% endif %}
-
 </div>
 {% endblock %}

@@ -2,7 +2,8 @@
 
 {% block content %}
 <h1>Transactions on Loan </h1>
-<table>
+    <br>
+<table class="table table-dark table-striped">
     <thead>
         <tr>
             <th>Transaction number</th>
@@ -18,10 +19,10 @@
     <tbody>
         {% for transaction in transactions %}
         <tr>
-            <td>{{ transaction.transaction_number }}</td>
-            <td>{{ transaction.account_number }}</td>
-            <td>{{ transaction.performed_by_ssn }}</td>
-            <td>{{ transaction.customer_request_ssn }}</td>
+            <td>{{ transaction.transaction_num }}</td>
+            <td>{{ transaction.account }}</td>
+            <td>{{ transaction.teller}}</td>
+            <td>{{ transaction.customer }}</td>
             <td>{{ transaction.loan_payment }}</td>
             <td>{{ transaction.amount }}</td>
             <td>{{ transaction.date }}</td>
