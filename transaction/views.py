@@ -2,14 +2,16 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import TransactionForm
 from employee.models import Teller
 from account.models import *
+from loan.models import *
 
 
-def perform_trans(request,cid):
+def perform_trans(request, cid, account_id):
     try:
         Teller.objects.get(pk=request.user.id)
     except:
         return redirect('home:home')
     target_customer = get_object_or_404(Customer, ssn=cid)
+    account = get_object_or_404(Account, account_num=account_id)
     title = 'Transaction'
     header = 'Perform Transaction'
     button = 'Submit'
@@ -21,13 +23,34 @@ def perform_trans(request,cid):
         # make sure there are no errors
         if form.is_valid():
             # create a user object without submitting it to the database
-            tran = form.save(commit=False)
-            tran.teller = request.user
-            tran.customer = Customer.objects.get(pk=cid)
-            # commit the user to the database
-            tran.save()
-
-            return render(request, '../templates/success.html')
+            trans = form.save(commit=False)
+            # connect to customer
+            trans.customer = target_customer
+            # set the teller
+            trans.teller = Teller.objects.get(pk=request.user.id)
+            # set the account for the transaction
+            trans.account = account
+            # If get the loan object
+            loan = trans.loan
+            # make sure the balance is more than what the person is paying
+            flag = True
+            if account.balance < trans.amount:
+                flag = False
+                form.add_error(None, f"Account does not have enough balance. Account balance: ${str(account.balance)}")
+                # make sure the remaining is greater than 0
+            if loan.remaining < trans.amount:
+                flag = False
+                form.add_error(None, f"Paying too much. loan remaining: ${str(loan.remaining)}")
+            if flag:
+                # update the loan and the account
+                account.balance = account.balance - trans.amount
+                loan.remaining = loan.remaining - trans.amount
+                if loan.remaining == 0:
+                    loan.delete()
+                loan.save()
+                trans.save()
+                account.save()
+                return render(request, '../templates/success.html')
     else:
         # if the form wasn't filled before, make a new empty form.
         form = TransactionForm(customer1=target_customer)
