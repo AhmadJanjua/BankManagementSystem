@@ -68,7 +68,7 @@ def delete_loan(request,loanNo):
         return redirect('home:home')
     loan = Loan.objects.get(pk=loanNo)
     loan.delete()
-    return redirect('employee:customer_home')
+    return redirect('customer:customer_home')
 
 
 def view_loan_transactions(request, loanNo):
