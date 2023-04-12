@@ -134,6 +134,7 @@
             <th> {{ account.monthly_fee }}</th>
             <th>
                 <a class="btn btn-primary" href="{% url 'transaction:perform' cid=customer.ssn account_id=account.account_num %}"> Pay Loan </a>
+                <a class="btn btn-primary" href="{% url 'transaction:update_account_balance' cid=customer.ssn account_id=account.account_num %}"> Update Balance </a>
             </th>
         </tr>
         {% endfor %}
@@ -156,6 +157,7 @@
             <th> {{ account.interest_rate }}</th>
             <th>
                 <a class="btn btn-primary" href="{% url 'transaction:perform' cid=customer.ssn account_id=account.account_num %}"> Pay Loan </a>
+                <a class="btn btn-primary" href="{% url 'transaction:update_account_balance' cid=customer.ssn account_id=account.account_num %}"> Update Balance </a>
             </th>
         </tr>
         {% endfor %}

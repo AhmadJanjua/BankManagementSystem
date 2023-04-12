@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import TransactionForm
+from .forms import TransactionForm, AccountBalanceUpdateForm
 from employee.models import Teller
 from account.models import *
 from loan.models import *
@@ -57,3 +57,31 @@ def perform_trans(request, cid, account_id):
     # Display the form using signup html and form
     return render(request, '../templates/render_form.html',
                   {'form': form, 'title': title, 'header': header, 'button': button})
+
+def update_account_balance(request, cid, account_id):
+    try:
+        Teller.objects.get(pk=request.user.id)
+    except:
+        return redirect('home:home')
+
+    target_customer = get_object_or_404(Customer, ssn=cid)
+    account = get_object_or_404(Account, account_num=account_id)
+
+    title = 'Update Account Balance'
+    header = 'Update Account Balance'
+    button = 'Submit'
+
+    if request.method == 'POST':
+        form = AccountBalanceUpdateForm(request.POST)
+
+        if form.is_valid():
+            new_balance = form.cleaned_data['new_balance']
+            account.balance = new_balance
+            account.save()
+            return render(request, '../templates/success.html')
+    else:
+        form = AccountBalanceUpdateForm(initial={'new_balance': account.balance})
+
+    return render(request, '../templates/render_form.html',
+                  {'form': form, 'title': title, 'header': header, 'button': button})
+

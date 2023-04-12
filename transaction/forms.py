@@ -14,4 +14,6 @@ class TransactionForm(forms.ModelForm):
         customer = customer1
         if customer:
             self.fields['loan'].queryset = Loan.objects.filter(customer=customer)
-    
+
+class AccountBalanceUpdateForm(forms.Form):
+    new_balance = forms.DecimalField(label='New Account Balance', decimal_places=2, required=True)
