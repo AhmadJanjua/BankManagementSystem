@@ -58,11 +58,11 @@ def create_advisor(request):
 @login_required
 def employee_password(request, emp_id):
     # if the user is not admin they cannot edit a manager
-    if not request.user.is_superuser:
+    if not request.user.is_superuser and not request.user.is_manager:
         return redirect('home:home')
     # populate the render fields
     title = 'Update'
-    header = 'Update Manager'
+    header = 'Update Employee'
     button = 'Submit'
     # Retrieve the model instance to be updated
     emp = get_object_or_404(Employee, id=emp_id)

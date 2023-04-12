@@ -6,7 +6,6 @@ from transaction.models import Transaction
 from .forms import CustomerForm
 from .models import Customer
 from django.contrib.auth.decorators import login_required
-import re
 
 
 @login_required

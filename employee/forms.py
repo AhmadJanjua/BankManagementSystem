@@ -17,6 +17,8 @@ class EmployeeForm(UserCreationForm):
         super().__init__(*args, **kwargs)
         # modify the label of the dept field
         self.fields['dept'].label = 'Department'
+        self.fields['f_name'].label = 'First Name'
+        self.fields['l_name'].label = 'Last Name'
         # modify the queryset of the dept field
         if not self.user.is_superuser:
             dept_pk = self.user.dept.DNO  # extract DNO attribute from Department object
@@ -84,9 +86,17 @@ class AdvisorEditForm(EmployeeEditForm):
 class EmployeeEditForm(forms.ModelForm):
     birthday = forms.DateField(widget=DateInput)
 
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        self.fields['dept'].label = 'Department'
+        self.fields['f_name'].label = 'First Name'
+        self.fields['l_name'].label = 'Last Name'
+
     class Meta:
         model = Employee
         fields = ('ssn', 'dept', 'f_name', 'l_name', 'birthday', 'street', 'city', 'province', 'postal_code', 'supervisor')
+
 
 class TellerEditForm(EmployeeEditForm):
     class Meta:
