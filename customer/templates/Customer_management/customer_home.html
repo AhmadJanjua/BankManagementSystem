@@ -1,17 +1,21 @@
 {% extends 'base.html' %}
 
-{% block title %} Home Page {% endblock %}
+{% block title %} Customer Home {% endblock %}
 
 {%block content%}
-<h1>You searched for {{ searched }}</h1>
-<h2> {{ customers|length }} results</h2>
+<h1> Customer Management </h1>
 
 <br>
-<form method="GET" action="{% url 'employee:customer_search' %}">
+<form method="GET" action="{% url 'customer:customer_search' %}">
     <div class="input-group">
         <input type="search" class="form-control" name="results" placeholder="Search Customers...">
         <button type="submit" class="btn btn-dark">Search</button>
     </div>
+</form>
+<br>
+
+<form action="{% url 'customer:create_customer' %}">
+    <button type="submit" class="btn btn-info">Create new Customer </button>
 </form>
 <br>
 
@@ -28,7 +32,8 @@
         <th>postal code</th>
         <th>employment status</th>
         <th>credit score</th>
-        <th></th>
+        <th> Actions </th>
+
     </tr>
     {% for customer in customers %}
     <tr>
@@ -42,6 +47,11 @@
         <th> {{ customer.postal_code }}</th>
         <th> {{ customer.employment_status }}</th>
         <th> {{ customer.credit_score }}</th>
+        <th>
+            <a class="btn btn-primary" href="{% url 'customer:customer_info' cus_id=customer.ssn %}"> View </a>
+            <a class="btn btn-warning" href="{% url 'customer:customer_edit' cus_id=customer.ssn %}"> Edit </a>
+            <a class="btn btn-danger" href="{% url 'customer:customer_delete' cus_id=customer.ssn %}"> Delete </a>
+        </th>
     </tr>
     {% endfor %}
 </table>

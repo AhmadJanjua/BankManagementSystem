@@ -376,35 +376,3 @@ def advisor_delete(request, adv_id):
     # redirect to home
     return redirect('employee:advisor_home')
 
-##### Customer Management (For Teller Use)
-
-@login_required
-def customer_home(request):
-    #get all the customers
-    customers = Customer.objects.all()
-    #display the home
-    return render(request,'Customer_management/customer_home.html',{'customers': customers})
-
-@login_required
-def customer_search(request):
-    #if the user is not a teller or advisor they cannot search customers
-    #if not request.user.is_teller or not request.user.is_advisor:
-        #return redirect('home:home')
-    searched = request.GET.get('results','')
-    #check if there was something searched
-    if searched:
-        #check data for matches
-        customers = Customer.objects.filter(Q(f_name__contains=searched) | Q(l_name__contains=searched))
-    else:
-        customers = Customer.objects.none()
-    #display results
-    return render(request,'Customer_management/customer_search.html',{'searched':searched,'customers':customers})
-
-@login_required
-def customer_info(request,cus_id):
-    cus = get_object_or_404(Customer,ssn=cus_id)
-    cus_loans = Loan.objects.filter(customer=cus)
-    cus_transactions = Transaction.objects.filter(customer=cus)
-    cus_savings_accounts = Savings.objects.filter(customer=cus)
-    cus_chequing_accounts = Chequing.objects.filter(customer=cus)
-    return render(request,'Customer_management/customer_info.html',{'customer':cus,'transactions': cus_transactions,'loans':cus_loans,'chequing':cus_chequing_accounts, 'saving':cus_savings_accounts})

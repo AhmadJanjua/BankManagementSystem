@@ -32,8 +32,5 @@ urlpatterns = [
     path('advisor/edit/<int:adv_id>', advisor_edit, name='advisor_edit'),
     path('advisor/remove/<int:adv_id>', advisor_delete, name='advisor_delete'),
 
-    # customer management URL
-    path('customer/home/',customer_home,name='customer_home'),
-    path('customer/search/',customer_search,name='customer_search'),
-    path('customer/info/<str:cus_id>',customer_info,name='customer_info'),
+
 ]

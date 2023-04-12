@@ -7,5 +7,5 @@ from employee.models import Employee
 def home_view(request):
     user = Employee.objects.get(pk=request.user.id)
     if user.is_advisor or user.is_teller:
-        return redirect('employee:customer_home')
+        return redirect('customer:customer_home')
     return render(request, 'home.html')

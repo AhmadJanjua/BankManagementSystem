@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %} Error {% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <br>
+    <div class="alert alert-danger">
+        {{ error_message }}
+    </div>
+
+    <a href="{% url 'customer:customer_home' %}" class="btn btn-primary">Go back </a>
+{% endblock %}
